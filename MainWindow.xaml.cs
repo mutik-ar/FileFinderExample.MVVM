@@ -32,6 +32,19 @@ namespace FileFinderExample
             DataContext = viewModel;
         }
 
+        private void ButtonSelectSearchDirectory_Click(object sender, RoutedEventArgs e)
+        {
+            string selectedDirectory = FolderBrowserDialog.ShowDialog(parentHWnd: IntPtr.Zero, title: "Выбрать папку...", initialDirectory: null);
+            if (selectedDirectory != null)
+            {
+                string selectedPath = selectedDirectory;
+                if (!selectedPath.EndsWith("\\"))
+                {
+                    selectedPath += "\\";
+                }
+                viewModel.UpdateSearchPathReadonlyTextBox(selectedPath);
+            }
 
+        }
     }
 }

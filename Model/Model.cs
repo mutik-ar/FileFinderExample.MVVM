@@ -16,13 +16,14 @@ namespace FileFinderExample.Model
     {
         #region Fields
         private ObservableCollection<DriveInfoItem> _drivesList = new();
+        // Контекстный объект, содержащий необходимые свойства для обмена данными между формой и потоками для объектов BackgroundWorker        
+        private FileSearchInfo _fileSearchInfoHolder = new();
+    #endregion
 
-        #endregion
 
+    #region Properties
 
-        #region Properties
-
-        public ObservableCollection<DriveInfoItem> DrivesList 
+    public ObservableCollection<DriveInfoItem> DrivesList 
         {
             get
             {
@@ -36,6 +37,14 @@ namespace FileFinderExample.Model
         public Model()
         {
             LoadAvailableDrivesInfo();
+        }
+        #endregion
+
+
+        #region public Methods
+        public void SetSearchPath(string searchPath)
+        {
+            _fileSearchInfoHolder.SearchDirectory = searchPath;
         }
         #endregion
 

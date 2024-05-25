@@ -12,6 +12,7 @@ namespace FileFinderExample.Interfaces
     {
         vmComboBox<DriveInfoItem> Drives { get; }
         vmTextBox SearchPath { get; }
+        vmTextBox FilePart { get; }
 
     }
 }

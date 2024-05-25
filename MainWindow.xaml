@@ -33,14 +33,15 @@
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal" Grid.ColumnSpan="2">
             <TextBox x:Name="TextBoxSearchPath" HorizontalAlignment="Left" Margin="5"  TextWrapping="Wrap" VerticalAlignment="Center" 
-                     Width="700" Height="23" Text="{Binding Path=SearchPath.Text, UpdateSourceTrigger=PropertyChanged}"/>
-            <Button x:Name="ButtonSelectSearchDirectory" Width="100" Margin="5" Height="23" Content="Обзор..." ></Button>
+                     Width="700" Height="23" Text="{Binding Path=SearchPath.Text, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
+            <Button x:Name="ButtonSelectSearchDirectory" Width="100" Margin="5" Height="23" Content="Обзор..." Click="ButtonSelectSearchDirectory_Click"  ></Button>
         </StackPanel>
         <StackPanel Grid.Row="3" Orientation="Horizontal" Grid.ColumnSpan="2">
             <TextBlock x:Name="LabelFileName" HorizontalAlignment="Left" Margin="5"  TextWrapping="Wrap" Text="Полное имя файла, часть имени файла или часть пути, содержащего файл:" VerticalAlignment="Center" Width="700" Height="23"/>
         </StackPanel>
         <StackPanel Grid.Row="4" Orientation="Horizontal" Grid.ColumnSpan="2">
-            <TextBox x:Name="TextBoxFileName" HorizontalAlignment="Left" Margin="5"  TextWrapping="Wrap" VerticalAlignment="Center" Width="700" Height="23" />
+            <TextBox x:Name="TextBoxFileName" HorizontalAlignment="Left" Margin="5"  TextWrapping="Wrap" VerticalAlignment="Center" 
+                     Width="700" Height="23" Text="{Binding Path=FilePart.Text, UpdateSourceTrigger=PropertyChanged}"/>
             <Button x:Name="ButtonStartSearch" Width="100" Margin="5" Height="23" Content="Начать поиск" ></Button>
         </StackPanel>
         <StackPanel Grid.Row="5" Orientation="Horizontal" Grid.ColumnSpan="2">

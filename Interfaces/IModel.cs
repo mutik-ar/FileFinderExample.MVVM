@@ -9,6 +9,14 @@ namespace FileFinderExample.Interfaces
 {
     public interface IModel
     {
+        #region Fields
         ObservableCollection<DriveInfoItem> DrivesList { get; }
+
+        #endregion
+
+        #region Methods
+        void SetSearchPath(string searchPath);
+
+        #endregion
     }
 }

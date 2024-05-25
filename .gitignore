@@ -361,3 +361,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/obj/Debug/net8.0-windows/FileFinderExample_MarkupCompile.i.cache

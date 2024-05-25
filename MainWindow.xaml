@@ -1,0 +1,65 @@
+﻿<Window x:Class="FileFinderExample.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FileFinderExample.ViewModel"
+        mc:Ignorable="d"
+        Title="Пример поиска файлов в системе с помощью элементов BackgroundWorker" Background="#FFECECEC" SizeToContent="WidthAndHeight" ResizeMode="NoResize">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="15*"/>
+            <ColumnDefinition Width="191*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Grid.ColumnSpan="2">
+            <TextBlock x:Name="LabelDrive" HorizontalAlignment="Left" Margin="5"  TextWrapping="Wrap" Text="Диск для поиска:" VerticalAlignment="Center" Width="100" Height="23"/>
+            <ComboBox x:Name="ComboBoxDrives" Width="700" Margin="5" Height="23"  ItemsSource="{Binding Path=Drives.List}"  
+                                                                                  SelectedItem="{Binding Path=Drives.SelectedItem}" 
+                                                                                  SelectedIndex="{Binding Path=Drives.SelectedIndex}"></ComboBox>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="2">
+            <TextBlock x:Name="LabelSearchPath" HorizontalAlignment="Left" Margin="5"  TextWrapping="Wrap" Text="Путь для поиска:" VerticalAlignment="Center" Height="23"/>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Grid.ColumnSpan="2">
+            <TextBox x:Name="TextBoxSearchPath" HorizontalAlignment="Left" Margin="5"  TextWrapping="Wrap" VerticalAlignment="Center" 
+                     Width="700" Height="23" Text="{Binding Path=SearchPath.Text, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button x:Name="ButtonSelectSearchDirectory" Width="100" Margin="5" Height="23" Content="Обзор..." ></Button>
+        </StackPanel>
+        <StackPanel Grid.Row="3" Orientation="Horizontal" Grid.ColumnSpan="2">
+            <TextBlock x:Name="LabelFileName" HorizontalAlignment="Left" Margin="5"  TextWrapping="Wrap" Text="Полное имя файла, часть имени файла или часть пути, содержащего файл:" VerticalAlignment="Center" Width="700" Height="23"/>
+        </StackPanel>
+        <StackPanel Grid.Row="4" Orientation="Horizontal" Grid.ColumnSpan="2">
+            <TextBox x:Name="TextBoxFileName" HorizontalAlignment="Left" Margin="5"  TextWrapping="Wrap" VerticalAlignment="Center" Width="700" Height="23" />
+            <Button x:Name="ButtonStartSearch" Width="100" Margin="5" Height="23" Content="Начать поиск" ></Button>
+        </StackPanel>
+        <StackPanel Grid.Row="5" Orientation="Horizontal" Grid.ColumnSpan="2">
+            <TextBlock x:Name="LabelFoundFilesList" HorizontalAlignment="Left" Margin="5"  TextWrapping="Wrap" Text="Список найденных файлов:" VerticalAlignment="Center" Width="700" Height="23"/>
+        </StackPanel>
+        <ListView x:Name="ListViewFoundFiles" Grid.Row="6" Height="270" Width="800" Margin="12,5,12,5" Grid.ColumnSpan="2" >
+            <ListView.View>
+                <GridView>
+                    <GridView.Columns>
+                        <GridViewColumn Header="Имя файла"  Width="Auto" DisplayMemberBinding="{Binding Path}"/>
+                        <GridViewColumn Header="Размер файла, байт"  Width="Auto" DisplayMemberBinding="{Binding Size}"/>
+                    </GridView.Columns>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <StackPanel Grid.Row="7" Orientation="Horizontal" Grid.ColumnSpan="2">
+            <TextBlock x:Name="LabelProgress" HorizontalAlignment="Left" Margin="5"  TextWrapping="Wrap" Text="Прогресс:" VerticalAlignment="Center" Height="23"/>
+            <TextBlock x:Name="LabelFilesCount" HorizontalAlignment="Right" Margin="5"  TextWrapping="Wrap" Text="0" VerticalAlignment="Center"  Height="23"/>
+        </StackPanel>
+        <ProgressBar x:Name="ProgressBarMain" Grid.Row="8" Width="800" Height="23" Margin="12,5,12,5" Grid.ColumnSpan="2"></ProgressBar>
+    </Grid>
+</Window>

@@ -1,6 +1,6 @@
-﻿using System.Configuration;
-using System.Data;
-using System.Windows;
+﻿using System.Windows;
+using View;
+
 
 namespace FileFinderExample
 {
@@ -9,6 +9,14 @@ namespace FileFinderExample
     /// </summary>
     public partial class App : Application
     {
+        [STAThread]
+        public static void Main()
+        {
+            Model.Model model = new();
+            ViewModel.ViewModel viewModel = new(model);
+            MainWindow mainWindow = new(viewModel);
+            mainWindow.ShowDialog();
+        }
     }
 
 }

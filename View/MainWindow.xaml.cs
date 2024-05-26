@@ -1,17 +1,17 @@
 ﻿using ShellFileDialogs;
 using System.ComponentModel;
 using System.Windows;
+using Interfaces.ViewModel;
 
 
 
-namespace FileFinderExample
+namespace View
 {
 
 
     public struct FileProperty
     {
         public string Path { get; set; }
-
         public string Size { get; set; }
 
     }
@@ -20,13 +20,13 @@ namespace FileFinderExample
     /// </summary>
     public partial class MainWindow : Window
     {
-        BackgroundWorker BackgroundWorkerEstimateSearchTime = new();
-        BackgroundWorker BackgroundWorkerSearchFiles = new();
-        public ViewModel.ViewModel viewModel = new ViewModel.ViewModel(new Model.Model());
-        public MainWindow()
+        IViewModel _viewModel;
+        //IViewModel viewModel = new ViewModel.ViewModel(new Model.Model());
+        public MainWindow(IViewModel viewModel)
         {
             InitializeComponent();
-            DataContext = viewModel;
+            _viewModel = viewModel;
+            DataContext = _viewModel;
         }
 
         private void ButtonSelectSearchDirectory_Click(object sender, RoutedEventArgs e)
@@ -39,7 +39,7 @@ namespace FileFinderExample
                 {
                     selectedPath += "\\";
                 }
-                viewModel.UpdateSearchPathReadonlyTextBox(selectedPath);
+                _viewModel.UpdateSearchPathReadonlyTextBox(selectedPath);
             }
 
         }

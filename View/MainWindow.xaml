@@ -1,9 +1,8 @@
-﻿<Window x:Class="FileFinderExample.MainWindow"
+﻿<Window x:Class="View.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ViewModel"
         mc:Ignorable="d"
         Title="Пример поиска файлов в системе с помощью элементов BackgroundWorker" Background="#FFECECEC" SizeToContent="WidthAndHeight" ResizeMode="NoResize">
     <Grid>

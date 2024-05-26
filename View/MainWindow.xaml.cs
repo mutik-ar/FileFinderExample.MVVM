@@ -43,5 +43,10 @@ namespace View
             }
 
         }
+
+        private void ButtonStartSearch_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.SearchFiles();
+        }
     }
 }

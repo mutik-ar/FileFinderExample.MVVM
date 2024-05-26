@@ -1,12 +1,11 @@
 ﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using Interfaces.ViewModel;
 using Interfaces.Model;
 
 
 namespace ViewModel
 {
-    public class ViewModel: INotifyPropertyChanged, IViewModel
+    public class ViewModel: IViewModel
     {
         #region Fields
 
@@ -14,7 +13,10 @@ namespace ViewModel
 
         private vmComboBox<DriveInfoItem> _drives;
         private vmTextBox _searchPath;
-        private vmTextBox _filePart;
+        private vmTextBox _fileNameMask;
+        private vmButton _startSearch;
+        private string _contentStopSearch = "Прервать";
+        private string _contentStartSearch = "Начать поиск";
 
         #endregion
 
@@ -37,11 +39,19 @@ namespace ViewModel
             }
         }
 
-        public vmTextBox FilePart
+        public vmTextBox FileNameMask
         {
             get
             {
-                return _filePart;
+                return _fileNameMask;
+            }
+        }
+
+        public vmButton StartSearch
+        {
+            get
+            {
+                return _startSearch;
             }
         }
 
@@ -55,17 +65,13 @@ namespace ViewModel
             _model = model;
             _drives = new vmComboBox<DriveInfoItem>(_model.DrivesList);
             _drives.PropertyChanged += Drives_Changed;
+            _model.PropertyChanged += Model_Changed;
             _searchPath = new();
-            _searchPath.PropertyChanged += SearchPath_Changed;
-            _filePart = new();
-            _filePart.PropertyChanged += FilePart_Changed;
+            _fileNameMask = new();
+            _startSearch = new() { Content = _contentStartSearch } ;
+            Drives.SelectedIndex = 0;
         }
 
-
-        //public ViewModel()
-        //{
-        //    _model = new Model.Model();
-        //}
 
         #endregion
 
@@ -111,19 +117,15 @@ namespace ViewModel
             }
         }
 
+        public void SearchFiles()
+        {
+            _model.SearchFiles(SearchPath.Text, FileNameMask.Text);
+        }
 
         #endregion
 
 
         #region INotifyPropertyChanged Members
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string prop = "")
-        {
-            PropertyChangedEventHandler? handler = PropertyChanged;
-            handler?.Invoke(this, new PropertyChangedEventArgs(prop));
-        }
-
         private void Drives_Changed(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(Drives.List))
@@ -148,22 +150,22 @@ namespace ViewModel
             }
         }
 
-        private void SearchPath_Changed(object? sender, PropertyChangedEventArgs e)
+        private void Model_Changed(object? sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(SearchPath.Text))
+            if (e.PropertyName == nameof(_model.IsRunning))
             {
 
+                StartSearch.Content = _model.IsRunning ? _contentStopSearch: _contentStartSearch;
+                Drives.IsEnabled = !_model.IsRunning;
+                FileNameMask.IsEnabled = SearchPath.IsEnabled = FileNameMask.IsEnabled = !_model.IsRunning;
+                if (_model.IsRunning)
+                {
+                }
+                else
+                {
+                }
             }
         }
-        private void FilePart_Changed(object? sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(FilePart.Text))
-            {
-
-            }
-        }
-
-
 
         #endregion
     }

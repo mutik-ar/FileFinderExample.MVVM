@@ -1,38 +1,56 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using System.IO;
 using Interfaces.Model;
+using Shared;
+
 
 
 namespace Model
 {
-    public class Model: IModel, INotifyPropertyChanged
+    public class Model : Entity, IModel 
     {
         #region Fields
         private ObservableCollection<DriveInfoItem> _drivesList = new();
         // Контекстный объект, содержащий необходимые свойства для обмена данными между формой и потоками для объектов BackgroundWorker        
         private FileSearchInfo _fileSearchInfoHolder = new();
-    #endregion
+
+        /// <summary>
+        /// Текущий режим работы BackgroundWorker элементов и рекурсивного обхода директорий: 
+        /// Estimate - происходит оценка времени на поиск
+        /// Search - происходит непосредственно поиск файлов по заданной маске
+        /// </summary>
+        enum ActionMode
+        {
+            Estimate,
+            Search
+        }
+
+        #endregion
 
 
-    #region Properties
+        #region Properties
 
-    public ObservableCollection<DriveInfoItem> DrivesList 
+        public ObservableCollection<DriveInfoItem> DrivesList
         {
             get
             {
-              return _drivesList;
+                return _drivesList;
             }
         }
 
-
-        public FileSearchInfo FileSearchInfoHolder
+        public bool IsRunning 
         {
             get
             {
-                return _fileSearchInfoHolder;
+                return _fileSearchInfoHolder.IsRunning;
             }
-        }
+            set
+            {
+                _fileSearchInfoHolder.IsRunning = value;
+                OnPropertyChanged();
+            }
+        } 
+
 
         #endregion
 
@@ -45,10 +63,99 @@ namespace Model
 
 
         #region public Methods
-        public void SetSearchPath(string searchPath)
+        public void SearchFiles(string searchDirectory, string fileNameMask)
         {
-            _fileSearchInfoHolder.SearchDirectory = searchPath;
+            if (!IsRunning)
+            {
+                IsRunning = true;
+                _fileSearchInfoHolder.SearchDirectory = searchDirectory;
+                _fileSearchInfoHolder.FileNameMask = fileNameMask;
+                _fileSearchInfoHolder.FilesFound = 0;
+                _fileSearchInfoHolder.FoundFiles.Clear();
+                //CalculateFilesCountRecursively(searchDirectory, ActionMode.Estimate, _fileSearchInfoHolder);
+            }
+            else
+            {
+                IsRunning = false;
+            }
         }
+
+        /// <summary>
+        /// Выполняет рекурсивный обход директорий, начиная с родительской директории <paramref name="parentDirectory"/>.
+        /// Может работать в двух режимах:
+        /// 1) подсчёт общего количества вложенных файлов внутри родительской директории <paramref name="parentDirectory"/>,
+        /// 2) поиск в родительской директории <paramref name="parentDirectory"/> файла по заданной маске
+        /// </summary>
+        /// <param name="parentDirectory">родительская директория, с которой необходимо начать рекурсивный обход вложенных директорий и файлов</param>
+        /// <param name="workerMode">режим работы объектов BackgroundWorker: Estimate - оценка времени поиска в каталоге, Search - сам поиск</param>
+        /// <param name="fileInfoHolder">контекстный объект, содержащий необходимые свойства для обеспечения оценки поиска и самого поиска</param>
+        private void CalculateFilesCountRecursively(string parentDirectory, ActionMode _actionMode, FileSearchInfo fileInfoHolder)
+        {
+            try
+            {
+                IEnumerable<string> subdirectories = Directory.EnumerateDirectories(parentDirectory, "*", SearchOption.TopDirectoryOnly);
+                IEnumerable<string> files = Directory.EnumerateFiles(parentDirectory);
+
+                if (_actionMode == ActionMode.Estimate)
+                {
+                    // если было запрошено прерывание операции оценки времени поиска - выходим из рекурсии
+                    //if (BackgroundWorkerEstimateSearchTime.CancellationPending)
+                    //{
+                    //    return;
+                    //}
+
+                    fileInfoHolder.FilesTotalCount += files.LongCount();
+                    //BackgroundWorkerEstimateSearchTime.ReportProgress(10);
+                }
+                else if (_actionMode == ActionMode.Search)
+                {
+
+                    // если было запрошено прерывание операции поиска - выходим из рекурсии
+                    //if (BackgroundWorkerSearchFiles.CancellationPending)
+                    //{
+                    //    return;
+                    //}
+                    List<string> foundFiles = new();
+
+                    foreach (string file in files)
+                    {
+                        if (file.Contains(fileInfoHolder.FileNameMask))
+                        {
+                            fileInfoHolder.FoundFiles.Add(file);
+                            foundFiles.Add(file);
+                            fileInfoHolder.FilesFound++;
+                        }
+                    }
+
+
+                    fileInfoHolder.FilesProcessedCount += files.LongCount();
+                    int progress = (int)(fileInfoHolder.FilesProcessedCount * 100 / fileInfoHolder.FilesTotalCount);
+                    //BackgroundWorkerSearchFiles.ReportProgress(progress, foundFiles);
+                    fileInfoHolder.FoundFiles.Clear();
+                }
+
+                if (subdirectories.LongCount() > 0)
+                {
+                    foreach (string subdirectory in subdirectories)
+                    {
+                        CalculateFilesCountRecursively(subdirectory, _actionMode, fileInfoHolder);
+                    }
+                }
+            }
+            catch (UnauthorizedAccessException unauthorizedAccessException)
+            {
+                // TODO: обработать исключение при необходимости...
+            }
+            catch (DirectoryNotFoundException directoryNotFoundException)
+            {
+                // TODO: обработать исключение при необходимости...
+            }
+            catch (Exception otherException)
+            {
+                // TODO: обработать исключение при необходимости...
+            }
+        }
+
         #endregion
 
         /// <summary>
@@ -62,14 +169,6 @@ namespace Model
                 _drivesList.Add(new DriveInfoItem(driveInfo));
             }
         }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string prop = "")
-        {
-            PropertyChangedEventHandler? handler = PropertyChanged;
-            handler?.Invoke(this, new PropertyChangedEventArgs(prop));
-        }
-
 
     }
 }

@@ -1,22 +1,12 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+﻿using Shared;
+using System.Collections.ObjectModel;
+
 
 
 namespace Interfaces.ViewModel
 {
-    public class vmComboBox<T>: INotifyPropertyChanged
+    public class vmComboBox<T> : VisualEntity
     {
-        #region Events 
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string prop = "")
-        {
-            PropertyChangedEventHandler? handler = PropertyChanged;
-            handler?.Invoke(this, new PropertyChangedEventArgs(prop));
-        }
-
-        #endregion
 
 
         #region Fields

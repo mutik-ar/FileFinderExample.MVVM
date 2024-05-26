@@ -8,13 +8,14 @@ namespace Interfaces.ViewModel
 
         vmComboBox<DriveInfoItem> Drives { get; }
         vmTextBox SearchPath { get; }
-        vmTextBox FilePart { get; }
+        vmTextBox FileNameMask { get; }
 
         #endregion
 
         #region Methods
 
         void UpdateSearchPathReadonlyTextBox(string searchPath);
+        void SearchFiles();
 
         #endregion
 

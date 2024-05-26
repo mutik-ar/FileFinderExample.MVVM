@@ -1,10 +1,12 @@
 ﻿using System.IO;
 
-namespace FileFinderExample {
+namespace Interfaces.Model
+{
     /// <summary>
     /// Класс описывает элемент с информацией о диске для выпадающего списка на главной форме
     /// </summary>
-    public class DriveInfoItem {
+    public class DriveInfoItem
+    {
         /// <summary>
         /// хранит имя диска (например: "C:\\")
         /// </summary>
@@ -46,8 +48,10 @@ namespace FileFinderExample {
         /// </summary>
         /// <param name="driveInfo">входной экземпляр типа DriveInfo, на основе которого необходимо создать экземпляр класса DriveInfoItem</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public DriveInfoItem(DriveInfo driveInfo) {
-            if (driveInfo == null) {
+        public DriveInfoItem(DriveInfo driveInfo)
+        {
+            if (driveInfo == null)
+            {
                 throw new ArgumentNullException("driveInfo", "Ошибка: параметр не может быть null!");
             }
 
@@ -66,7 +70,8 @@ namespace FileFinderExample {
         /// </summary>
         /// <param name="size">размер, в байтах</param>
         /// <returns>целое число, размер в Гигабайтах</returns>
-        private long GetSizeInGigabytes(long size) {
+        private long GetSizeInGigabytes(long size)
+        {
             return size / 1_073_741_824;
         }
 
@@ -74,7 +79,8 @@ namespace FileFinderExample {
         /// Возвращает часть описания диска, связанного с общим/доступным/свободным объемом дискового пространства
         /// </summary>
         /// <returns>строка, содержащая детали по занимаемому и свободному месту на диске</returns>
-        private string GetVolumeSizeString() {
+        private string GetVolumeSizeString()
+        {
             return string.Format("Объём: {0}Гб, Всего свободно: {1}Гб, Доступно: {2}Гб", TotalSizeGb, TotalFreeSpaceGb, AvailableFreeSpaceGb);
         }
 
@@ -82,7 +88,8 @@ namespace FileFinderExample {
         /// Переопределение метода в целях отображения текста в заданном формате в выпадающем списке с дисками на главной форме
         /// </summary>
         /// <returns></returns>
-        public override string ToString() {
+        public override string ToString()
+        {
             return GetReadableDriveName() + ": " + DriveTypeString + ", " + DriveFormat + ", " + GetVolumeSizeString();
         }
 
@@ -92,8 +99,10 @@ namespace FileFinderExample {
         /// Если метка диска задана, вернёт строку в формате "[имя_метки_диска] имя_диска:\\", например: "[Мой системный диск] C:\\"
         /// </summary>
         /// <returns>строка, содержащая имя диска или метку и имя диска, если метка установлена</returns>
-        private string GetReadableDriveName() {
-            if (DriveVolumeLabel == null || DriveVolumeLabel.Length == 0) {
+        private string GetReadableDriveName()
+        {
+            if (DriveVolumeLabel == null || DriveVolumeLabel.Length == 0)
+            {
                 return "[" + DriveName + "]";
             }
             return "[" + DriveVolumeLabel + "] " + DriveName;
@@ -104,8 +113,10 @@ namespace FileFinderExample {
         /// </summary>
         /// <param name="driveType"></param>
         /// <returns></returns>
-        private string GetDriveTypeAsString(DriveType driveType) {
-            switch (driveType) {
+        private string GetDriveTypeAsString(DriveType driveType)
+        {
+            switch (driveType)
+            {
                 case DriveType.Fixed:
                     return "Фиксированный диск";
                 case DriveType.Network:

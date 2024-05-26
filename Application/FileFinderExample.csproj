@@ -9,7 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ShellFileDialogs\ShellFileDialogs\ShellFileDialogs.csproj" />
+    <ProjectReference Include="..\..\ShellFileDialogs\ShellFileDialogs\ShellFileDialogs.csproj" />
+    <ProjectReference Include="..\Model\Model.csproj" />
+    <ProjectReference Include="..\ViewModel\ViewModel.csproj" />
   </ItemGroup>
 
 </Project>

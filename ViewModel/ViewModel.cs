@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using FileFinderExample.Interfaces;
+using Interfaces.ViewModel;
+using Interfaces.Model;
 
-namespace FileFinderExample.ViewModel
+
+namespace ViewModel
 {
     public class ViewModel: INotifyPropertyChanged, IViewModel
     {
@@ -115,7 +107,7 @@ namespace FileFinderExample.ViewModel
             }
             else
             {
-                MessageBox.Show("Ошибка: невозможно найти диск, соответствующий выбранному пути", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                //MessageBox.Show("Ошибка: невозможно найти диск, соответствующий выбранному пути", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

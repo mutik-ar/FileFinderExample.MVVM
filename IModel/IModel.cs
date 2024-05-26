@@ -5,13 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FileFinderExample.Interfaces
+namespace Interfaces.Model
 {
     public interface IModel
     {
         #region Fields
-        ObservableCollection<DriveInfoItem> DrivesList { get; }
 
+        #endregion
+
+        #region Properties
+        ObservableCollection<DriveInfoItem> DrivesList { get; }
+        FileSearchInfo FileSearchInfoHolder { get; } 
         #endregion
 
         #region Methods

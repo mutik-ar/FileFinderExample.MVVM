@@ -77,9 +77,9 @@ namespace ViewModel
             //{
             //    FileSearchInfoHolder.FilesTotalCount = 0;
             //}
-            SearchPath.Text = searchPath;
             SelectDriveBySearchPath(searchPath);
-        }
+            SearchPath.Text = searchPath;
+       }
 
         /// <summary>
         /// Метод выбирает один из доступных в системе дисков в выпадающем списке по заданному пути поиска файлов.

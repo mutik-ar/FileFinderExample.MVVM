@@ -1,13 +1,17 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
+
 namespace Shared
 {
     public class VisualEntity : Entity
     {
         #region Fields
         private bool  _isEnabled = true;
+        private bool? _isVisible = true;
         #endregion
+
+
         #region Properties 
 
         public bool IsEnabled
@@ -16,6 +20,21 @@ namespace Shared
             set
             {
                 _isEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// true -> Visibly
+        /// false -> Hidden
+        /// null -> Collapsed
+        /// </summary>
+        public bool? IsVisible
+        {
+            get { return _isVisible; }
+            set
+            {
+                _isVisible = value;
                 OnPropertyChanged();
             }
         }

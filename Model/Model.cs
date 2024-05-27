@@ -70,6 +70,7 @@ namespace Model
                 IsRunning = true;
                 _fileSearchInfoHolder.SearchDirectory = searchDirectory;
                 _fileSearchInfoHolder.FileNameMask = fileNameMask;
+                _fileSearchInfoHolder.FilesTotalCount = 0;
                 _fileSearchInfoHolder.FilesFound = 0;
                 _fileSearchInfoHolder.FoundFiles.Clear();
                 //CalculateFilesCountRecursively(searchDirectory, ActionMode.Estimate, _fileSearchInfoHolder);

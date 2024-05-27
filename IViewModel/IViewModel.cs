@@ -9,6 +9,9 @@ namespace Interfaces.ViewModel
         vmComboBox<DriveInfoItem> Drives { get; }
         vmTextBox SearchPath { get; }
         vmTextBox FileNameMask { get; }
+        vmTextBlock FilesCount { get; }
+        vmTextBlock ProgressText { get; }
+        vmProgressBar ProgressBar { get; }
 
         #endregion
 

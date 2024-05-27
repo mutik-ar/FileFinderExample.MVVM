@@ -2,6 +2,8 @@
 using System.ComponentModel;
 using System.Windows;
 using Interfaces.ViewModel;
+using System.Globalization;
+using System.Windows.Data;
 
 
 
@@ -47,6 +49,40 @@ namespace View
         private void ButtonStartSearch_Click(object sender, RoutedEventArgs e)
         {
             _viewModel.SearchFiles();
+        }
+    }
+
+    [ValueConversion(typeof(bool), typeof(Visibility))]
+    public sealed class BoolToVisibilityConverter : IValueConverter
+    {
+        public Visibility TrueValue { get; set; }
+        public Visibility FalseValue { get; set; }
+        public Visibility NullValue { get; set; }
+
+        public BoolToVisibilityConverter()
+        {
+            // set defaults
+            TrueValue = Visibility.Visible;
+            FalseValue = Visibility.Hidden;
+            NullValue = Visibility.Collapsed;
+        }
+
+        public object Convert(object value, Type targetType,
+            object parameter, CultureInfo culture)
+        {
+            if (value == null)
+                return NullValue;
+            return (bool)value ? TrueValue : FalseValue;
+        }
+
+        public object ConvertBack(object value, Type targetType,
+            object parameter, CultureInfo culture)
+        {
+            if (Equals(value, TrueValue))
+                return true;
+            if (Equals(value, FalseValue))
+                return false;
+            return null;
         }
     }
 }

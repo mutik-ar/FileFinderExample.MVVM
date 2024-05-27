@@ -3,8 +3,11 @@ using Interfaces.ViewModel;
 using Interfaces.Model;
 
 
+
 namespace ViewModel
 {
+
+
     public class ViewModel: IViewModel
     {
         #region Fields
@@ -15,10 +18,15 @@ namespace ViewModel
         private vmTextBox _searchPath;
         private vmTextBox _fileNameMask;
         private vmButton _startSearch;
+        private vmTextBlock _filesCount;
+        private vmTextBlock _progressText;
+        private vmProgressBar _progressBar;
         private string _contentStopSearch = "Прервать";
         private string _contentStartSearch = "Начать поиск";
 
         #endregion
+
+
 
         #region Properties
 
@@ -26,6 +34,7 @@ namespace ViewModel
         {
             get
             {
+                if (_drives == null) _drives = new vmComboBox<DriveInfoItem>(_model.DrivesList);
                 return _drives;
             }
 
@@ -35,6 +44,7 @@ namespace ViewModel
         { 
             get
             {
+                if (_searchPath == null) _searchPath = new();
                 return _searchPath;
             }
         }
@@ -43,6 +53,7 @@ namespace ViewModel
         {
             get
             {
+                if (_fileNameMask == null) _fileNameMask = new();
                 return _fileNameMask;
             }
         }
@@ -51,10 +62,37 @@ namespace ViewModel
         {
             get
             {
+                if (_startSearch == null) _startSearch = new();
                 return _startSearch;
             }
         }
 
+        public vmTextBlock FilesCount
+        {
+            get
+            {
+                if (_filesCount == null) _filesCount = new();
+                return _filesCount;
+            }
+        }
+
+        public vmTextBlock ProgressText
+        {
+            get
+            {
+                if (_progressText == null) _progressText = new();
+                return _progressText;
+            }
+        }
+
+        public vmProgressBar ProgressBar
+        {
+            get
+            {
+                if (_progressBar == null) _progressBar = new();
+                return _progressBar;
+            }
+        }
 
         #endregion
 
@@ -63,13 +101,11 @@ namespace ViewModel
         public ViewModel(IModel model)
         {
             _model = model;
-            _drives = new vmComboBox<DriveInfoItem>(_model.DrivesList);
-            _drives.PropertyChanged += Drives_Changed;
-            _model.PropertyChanged += Model_Changed;
-            _searchPath = new();
-            _fileNameMask = new();
-            _startSearch = new() { Content = _contentStartSearch } ;
+            Drives.PropertyChanged += Drives_Changed;
             Drives.SelectedIndex = 0;
+            _model.PropertyChanged += Model_Changed;
+            StartSearch.Content = _contentStartSearch;
+            FilesCount.IsVisible = ProgressText.IsVisible = ProgressBar.IsVisible = false;
         }
 
 
@@ -160,9 +196,11 @@ namespace ViewModel
                 FileNameMask.IsEnabled = SearchPath.IsEnabled = FileNameMask.IsEnabled = !_model.IsRunning;
                 if (_model.IsRunning)
                 {
+                    ProgressText.IsVisible = FilesCount.IsVisible = ProgressBar.IsVisible = true;
                 }
                 else
                 {
+                    ProgressText.IsVisible = FilesCount.IsVisible = ProgressBar.IsVisible = false;
                 }
             }
         }

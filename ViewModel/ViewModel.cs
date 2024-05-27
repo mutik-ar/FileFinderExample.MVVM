@@ -203,6 +203,10 @@ namespace ViewModel
                     ProgressText.IsVisible = FilesCount.IsVisible = ProgressBar.IsVisible = false;
                 }
             }
+            if (e.PropertyName == nameof(_model.FilesTotalCount))
+            {
+                FilesCount.Text = _model.FilesTotalCount.ToString();
+            }
         }
 
         #endregion

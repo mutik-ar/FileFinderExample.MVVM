@@ -18,6 +18,7 @@ namespace Interfaces.Model
         ObservableCollection<DriveInfoItem> DrivesList { get; }
 
         public bool IsRunning { get; set; }
+        public long FilesTotalCount { get; set; }
 
         #endregion
 

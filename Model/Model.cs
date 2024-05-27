@@ -49,8 +49,20 @@ namespace Model
                 _fileSearchInfoHolder.IsRunning = value;
                 OnPropertyChanged();
             }
-        } 
+        }
 
+        public long FilesTotalCount
+        {
+            get
+            {
+                return _fileSearchInfoHolder.FilesTotalCount;
+            }
+            set
+            {
+                _fileSearchInfoHolder.FilesTotalCount = value;
+                OnPropertyChanged();
+            }
+        }
 
         #endregion
 
@@ -70,10 +82,10 @@ namespace Model
                 IsRunning = true;
                 _fileSearchInfoHolder.SearchDirectory = searchDirectory;
                 _fileSearchInfoHolder.FileNameMask = fileNameMask;
-                _fileSearchInfoHolder.FilesTotalCount = 0;
+                FilesTotalCount = 0;
                 _fileSearchInfoHolder.FilesFound = 0;
                 _fileSearchInfoHolder.FoundFiles.Clear();
-                //CalculateFilesCountRecursively(searchDirectory, ActionMode.Estimate, _fileSearchInfoHolder);
+                CalculateFilesCountRecursively(searchDirectory, ActionMode.Estimate, _fileSearchInfoHolder);
             }
             else
             {
@@ -105,7 +117,7 @@ namespace Model
                     //    return;
                     //}
 
-                    fileInfoHolder.FilesTotalCount += files.LongCount();
+                    FilesTotalCount += files.LongCount();
                     //BackgroundWorkerEstimateSearchTime.ReportProgress(10);
                 }
                 else if (_actionMode == ActionMode.Search)

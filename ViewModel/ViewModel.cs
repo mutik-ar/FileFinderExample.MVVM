@@ -34,8 +34,7 @@ namespace ViewModel
         {
             get
             {
-                if (_drives == null) _drives = new vmComboBox<DriveInfoItem>(_model.DrivesList);
-                return _drives;
+                return _drives ?? (_drives = new vmComboBox<DriveInfoItem>(_model.DrivesList));
             }
 
         }
@@ -44,8 +43,7 @@ namespace ViewModel
         { 
             get
             {
-                if (_searchPath == null) _searchPath = new();
-                return _searchPath;
+                return _searchPath ?? (_searchPath = new());
             }
         }
 
@@ -53,8 +51,7 @@ namespace ViewModel
         {
             get
             {
-                if (_fileNameMask == null) _fileNameMask = new();
-                return _fileNameMask;
+                return _fileNameMask ?? (_fileNameMask = new());
             }
         }
 
@@ -62,8 +59,7 @@ namespace ViewModel
         {
             get
             {
-                if (_startSearch == null) _startSearch = new();
-                return _startSearch;
+                return _startSearch ?? (_startSearch = new());
             }
         }
 
@@ -71,8 +67,7 @@ namespace ViewModel
         {
             get
             {
-                if (_filesCount == null) _filesCount = new();
-                return _filesCount;
+                return _filesCount ?? (_filesCount = new());
             }
         }
 
@@ -80,8 +75,7 @@ namespace ViewModel
         {
             get
             {
-                if (_progressText == null) _progressText = new();
-                return _progressText;
+                return _progressText ?? (_progressText = new());
             }
         }
 
@@ -89,8 +83,7 @@ namespace ViewModel
         {
             get
             {
-                if (_progressBar == null) _progressBar = new();
-                return _progressBar;
+                return _progressBar ?? (_progressBar = new());
             }
         }
 

@@ -153,9 +153,9 @@ namespace ViewModel
             }
         }
 
-        public void SearchFiles()
+        public void FilesAction()
         {
-            _model.SearchFiles(SearchPath.Text, FileNameMask.Text);
+            _model.FilesAction(SearchPath.Text, FileNameMask.Text);
         }
 
         #endregion

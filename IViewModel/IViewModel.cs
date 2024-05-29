@@ -18,7 +18,7 @@ namespace Interfaces.ViewModel
         #region Methods
 
         void UpdateSearchPathReadonlyTextBox(string searchPath);
-        void SearchFiles();
+        void FilesAction();
 
         #endregion
 

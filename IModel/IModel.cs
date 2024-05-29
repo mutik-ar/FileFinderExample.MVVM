@@ -24,7 +24,7 @@ namespace Interfaces.Model
 
         #region Methods
 
-        void SearchFiles(string searchDirectory, string fileNameMask);
+        void FilesAction(string searchDirectory, string fileNameMask);
 
         #endregion
 

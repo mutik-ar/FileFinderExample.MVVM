@@ -13,6 +13,7 @@ namespace Model
         private ObservableCollection<DriveInfoItem> _drivesList = new();
         // Контекстный объект, содержащий необходимые свойства для обмена данными между формой и потоками для объектов BackgroundWorker        
         private FileSearchInfo _fileSearchInfoHolder = new();
+        CancellationTokenSource tokenSource;
 
         /// <summary>
         /// Текущий режим работы BackgroundWorker элементов и рекурсивного обхода директорий: 
@@ -75,7 +76,7 @@ namespace Model
 
 
         #region public Methods
-        public void SearchFiles(string searchDirectory, string fileNameMask)
+        public void FilesAction(string searchDirectory, string fileNameMask)
         {
             if (!IsRunning)
             {
@@ -85,13 +86,27 @@ namespace Model
                 FilesTotalCount = 0;
                 _fileSearchInfoHolder.FilesFound = 0;
                 _fileSearchInfoHolder.FoundFiles.Clear();
-                CalculateFilesCountRecursively(searchDirectory, ActionMode.Estimate, _fileSearchInfoHolder);
+                FilesTotalCount = 0;
+                //var progress = new Progress<int>(); 
+                //progress.ProgressChanged += OnProgressChanged;
+                tokenSource = new();
+                Task.Run(() =>
+                {
+                    CalculateFilesCountRecursively(searchDirectory, ActionMode.Estimate, _fileSearchInfoHolder, tokenSource.Token);
+                }).ContinueWith((_) => { IsRunning = false; });
             }
             else
             {
-                IsRunning = false;
+                tokenSource?.Cancel();
+                //IsRunning = false;
             }
         }
+
+        //static void OnProgressChanged(object? sender, int e)
+        //{
+        //    Console.WriteLine($"event ProgressChanged: {e} %");
+        //}
+
 
         /// <summary>
         /// Выполняет рекурсивный обход директорий, начиная с родительской директории <paramref name="parentDirectory"/>.
@@ -102,10 +117,12 @@ namespace Model
         /// <param name="parentDirectory">родительская директория, с которой необходимо начать рекурсивный обход вложенных директорий и файлов</param>
         /// <param name="workerMode">режим работы объектов BackgroundWorker: Estimate - оценка времени поиска в каталоге, Search - сам поиск</param>
         /// <param name="fileInfoHolder">контекстный объект, содержащий необходимые свойства для обеспечения оценки поиска и самого поиска</param>
-        private void CalculateFilesCountRecursively(string parentDirectory, ActionMode _actionMode, FileSearchInfo fileInfoHolder)
+        private void CalculateFilesCountRecursively(string parentDirectory, ActionMode _actionMode, FileSearchInfo fileInfoHolder, CancellationToken token)
         {
             try
             {
+                if (token.IsCancellationRequested)
+                    return;
                 IEnumerable<string> subdirectories = Directory.EnumerateDirectories(parentDirectory, "*", SearchOption.TopDirectoryOnly);
                 IEnumerable<string> files = Directory.EnumerateFiles(parentDirectory);
 
@@ -132,6 +149,8 @@ namespace Model
 
                     foreach (string file in files)
                     {
+                        if (token.IsCancellationRequested)
+                            return;
                         if (file.Contains(fileInfoHolder.FileNameMask))
                         {
                             fileInfoHolder.FoundFiles.Add(file);
@@ -151,7 +170,7 @@ namespace Model
                 {
                     foreach (string subdirectory in subdirectories)
                     {
-                        CalculateFilesCountRecursively(subdirectory, _actionMode, fileInfoHolder);
+                        CalculateFilesCountRecursively(subdirectory, _actionMode, fileInfoHolder, token);
                     }
                 }
             }

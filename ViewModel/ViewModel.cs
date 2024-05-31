@@ -23,6 +23,7 @@ namespace ViewModel
         private vmProgressBar _progressBar;
         private string _contentStopSearch = "Прервать";
         private string _contentStartSearch = "Начать поиск";
+        private ActionCommand _filesActionCommand;
 
         #endregion
 
@@ -87,6 +88,15 @@ namespace ViewModel
             }
         }
 
+        public ActionCommand FilesActionCommand
+        {
+            get
+            {
+                return _filesActionCommand ?? (_filesActionCommand = new(FilesAction));
+            }
+        }
+
+
         #endregion
 
         #region Constructor
@@ -99,14 +109,15 @@ namespace ViewModel
             _model.PropertyChanged += Model_Changed;
             StartSearch.Content = _contentStartSearch;
             FilesCount.IsVisible = ProgressText.IsVisible = ProgressBar.IsVisible = false;
-        }
+ 
+    }
 
 
-        #endregion
+    #endregion
 
-        #region Public Methods
+    #region Public Methods
 
-        public void UpdateSearchPathReadonlyTextBox(string searchPath)
+    public void UpdateSearchPathReadonlyTextBox(string searchPath)
         {
             //if (!searchPath.Equals(SearchPath.Text) && FileSearchInfoHolder.FilesTotalCount > 0)
             //{
@@ -146,7 +157,7 @@ namespace ViewModel
             }
         }
 
-        public void FilesAction()
+        private void FilesAction()
         {
             _model.FilesAction(SearchPath.Text, FileNameMask.Text);
         }

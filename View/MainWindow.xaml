@@ -51,7 +51,9 @@
             <TextBox x:Name="TextBoxFileName" HorizontalAlignment="Left" Margin="5"  TextWrapping="Wrap" VerticalAlignment="Center" 
                      Width="700" Height="23" Text="{Binding Path=FileNameMask.Text, UpdateSourceTrigger=PropertyChanged}"
                      IsEnabled="{Binding Path=FileNameMask.IsEnabled, UpdateSourceTrigger=PropertyChanged}"/>
-            <Button x:Name="ButtonStartSearch" Width="100" Margin="5" Height="23" Content="{Binding Path=StartSearch.Content, UpdateSourceTrigger=PropertyChanged}" Click="ButtonStartSearch_Click" ></Button>
+            <Button x:Name="ButtonStartSearch" Width="100" Margin="5" Height="23" 
+                    Content="{Binding Path=StartSearch.Content, UpdateSourceTrigger=PropertyChanged}" 
+                    Command="{Binding FilesActionCommand}"></Button>
         </StackPanel>
         <StackPanel Grid.Row="5" Orientation="Horizontal" Grid.ColumnSpan="2">
             <TextBlock x:Name="LabelFoundFilesList" HorizontalAlignment="Left" Margin="5"  TextWrapping="Wrap" Text="Список найденных файлов:" VerticalAlignment="Center" Width="700" Height="23"/>

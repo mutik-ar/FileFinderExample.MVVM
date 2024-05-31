@@ -12,13 +12,13 @@ namespace Interfaces.ViewModel
         vmTextBlock FilesCount { get; }
         vmTextBlock ProgressText { get; }
         vmProgressBar ProgressBar { get; }
+        ActionCommand FilesActionCommand { get; }
 
         #endregion
 
         #region Methods
 
         void UpdateSearchPathReadonlyTextBox(string searchPath);
-        void FilesAction();
 
         #endregion
 

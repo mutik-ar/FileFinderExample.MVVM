@@ -39,32 +39,6 @@ namespace Model
             }
         }
 
-        public bool IsRunning 
-        {
-            get
-            {
-                return _fileSearchInfoHolder.IsRunning;
-            }
-            set
-            {
-                _fileSearchInfoHolder.IsRunning = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool IsCanceled
-        {
-            get
-            {
-                return _fileSearchInfoHolder.IsCanceled;
-            }
-            set
-            {
-                _fileSearchInfoHolder.IsCanceled = value;
-                OnPropertyChanged();
-            }
-        }
-
         public long FilesTotalCount
         {
             get

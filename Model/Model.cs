@@ -52,6 +52,19 @@ namespace Model
             }
         }
 
+        public bool IsCanceled
+        {
+            get
+            {
+                return _fileSearchInfoHolder.IsCanceled;
+            }
+            set
+            {
+                _fileSearchInfoHolder.IsCanceled = value;
+                OnPropertyChanged();
+            }
+        }
+
         public long FilesTotalCount
         {
             get
@@ -61,6 +74,32 @@ namespace Model
             set
             {
                 _fileSearchInfoHolder.FilesTotalCount = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public long FilesFound
+        {
+            get
+            {
+                return _fileSearchInfoHolder.FilesFound;
+            }
+            set
+            {
+                _fileSearchInfoHolder.FilesFound = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public States State 
+        {
+            get
+            {
+                return _fileSearchInfoHolder.State;
+            }
+            set
+            {
+                _fileSearchInfoHolder.State = value;
                 OnPropertyChanged();
             }
         }
@@ -78,35 +117,68 @@ namespace Model
         #region public Methods
         public void FilesAction(string searchDirectory, string fileNameMask)
         {
-            if (!IsRunning)
+            States state = State;
+            switch (state)
             {
-                IsRunning = true;
-                _fileSearchInfoHolder.SearchDirectory = searchDirectory;
-                _fileSearchInfoHolder.FileNameMask = fileNameMask;
-                FilesTotalCount = 0;
-                _fileSearchInfoHolder.FilesFound = 0;
-                _fileSearchInfoHolder.FoundFiles.Clear();
-                FilesTotalCount = 0;
-                //var progress = new Progress<int>(); 
-                //progress.ProgressChanged += OnProgressChanged;
+                case States.Start:
+                case States.EstimateCanceled:
+                case States.Finish:
+                    _fileSearchInfoHolder.SearchDirectory = searchDirectory;
+                    _fileSearchInfoHolder.FileNameMask = fileNameMask;
+                    FilesTotalCount = 0;
+                    FilesFound = 0;
+                    _fileSearchInfoHolder.FoundFiles.Clear();
+                    State = States.EstimateProccess;
+                    break;
+                case States.EstimateProccess:
+                    tokenSource?.Cancel();
+                    break;
+                case States.EstimateComplited:
+                    break;
+                case States.FilesSearchProccess:
+                    tokenSource?.Cancel();
+                    break;
+                case States.FilesSearchComplited:
+                    break;
+                case States.FilesSearchCanceled:
+                    FilesFound = 0;
+                    _fileSearchInfoHolder.FoundFiles.Clear();
+                    State = States.FilesSearchProccess;
+                    break;
+            }
+
+            if (State == States.EstimateProccess || State == States.FilesSearchProccess)
+            {
                 tokenSource = new();
                 Task.Run(() =>
                 {
-                    CalculateFilesCountRecursively(searchDirectory, ActionMode.Estimate, _fileSearchInfoHolder, tokenSource.Token);
-                }).ContinueWith((_) => { IsRunning = false; });
-            }
-            else
-            {
-                tokenSource?.Cancel();
-                //IsRunning = false;
+                    if (State == States.EstimateProccess)
+                    {
+                        CalculateFilesCountRecursively(_fileSearchInfoHolder.SearchDirectory, State, tokenSource.Token);
+                        if (State == States.EstimateProccess)
+                        {
+                            State = States.EstimateComplited;
+                        }
+                    }
+                    if (State == States.FilesSearchProccess || State == States.EstimateComplited)
+                    {
+                        if (State == States.EstimateComplited)
+                        {
+                            State = States.FilesSearchProccess;
+                        }
+                        CalculateFilesCountRecursively(_fileSearchInfoHolder.SearchDirectory, State, tokenSource.Token);
+                        if (State == States.FilesSearchProccess)
+                        {
+                            State = States.FilesSearchComplited;
+                        }
+                    }
+                    if (State == States.EstimateComplited || State == States.FilesSearchComplited)
+                    {
+                        State = States.Finish;
+                    }
+                });
             }
         }
-
-        //static void OnProgressChanged(object? sender, int e)
-        //{
-        //    Console.WriteLine($"event ProgressChanged: {e} %");
-        //}
-
 
         /// <summary>
         /// Выполняет рекурсивный обход директорий, начиная с родительской директории <paramref name="parentDirectory"/>.
@@ -117,60 +189,81 @@ namespace Model
         /// <param name="parentDirectory">родительская директория, с которой необходимо начать рекурсивный обход вложенных директорий и файлов</param>
         /// <param name="workerMode">режим работы объектов BackgroundWorker: Estimate - оценка времени поиска в каталоге, Search - сам поиск</param>
         /// <param name="fileInfoHolder">контекстный объект, содержащий необходимые свойства для обеспечения оценки поиска и самого поиска</param>
-        private void CalculateFilesCountRecursively(string parentDirectory, ActionMode _actionMode, FileSearchInfo fileInfoHolder, CancellationToken token)
+        private void CalculateFilesCountRecursively(String parentDirectory, States state, CancellationToken token)
         {
             try
             {
                 if (token.IsCancellationRequested)
-                    return;
+                {
+                    if (state == States.EstimateProccess)
+                    {
+                        State = States.EstimateCanceled;
+                    }
+                    if (state == States.FilesSearchProccess)
+                    {
+                        State = States.FilesSearchCanceled;
+                    }
+                    return; 
+                }
                 IEnumerable<string> subdirectories = Directory.EnumerateDirectories(parentDirectory, "*", SearchOption.TopDirectoryOnly);
                 IEnumerable<string> files = Directory.EnumerateFiles(parentDirectory);
 
-                if (_actionMode == ActionMode.Estimate)
+                if (state == States.EstimateProccess)
                 {
                     // если было запрошено прерывание операции оценки времени поиска - выходим из рекурсии
-                    //if (BackgroundWorkerEstimateSearchTime.CancellationPending)
-                    //{
-                    //    return;
-                    //}
-
                     FilesTotalCount += files.LongCount();
-                    //BackgroundWorkerEstimateSearchTime.ReportProgress(10);
                 }
-                else if (_actionMode == ActionMode.Search)
+                else if (state == States.FilesSearchProccess)
                 {
 
                     // если было запрошено прерывание операции поиска - выходим из рекурсии
-                    //if (BackgroundWorkerSearchFiles.CancellationPending)
-                    //{
-                    //    return;
-                    //}
                     List<string> foundFiles = new();
 
                     foreach (string file in files)
                     {
                         if (token.IsCancellationRequested)
-                            return;
-                        if (file.Contains(fileInfoHolder.FileNameMask))
                         {
-                            fileInfoHolder.FoundFiles.Add(file);
+                            if (state == States.EstimateProccess)
+                            {
+                                State = States.EstimateCanceled;
+                            }
+                            if (state == States.FilesSearchProccess)
+                            {
+                                State = States.FilesSearchCanceled;
+                            }
+                            return;
+                        }
+                        if (file.Contains(_fileSearchInfoHolder.FileNameMask))
+                        {
+                            _fileSearchInfoHolder.FoundFiles.Add(file);
                             foundFiles.Add(file);
-                            fileInfoHolder.FilesFound++;
+                            FilesFound++;
                         }
                     }
 
 
-                    fileInfoHolder.FilesProcessedCount += files.LongCount();
-                    int progress = (int)(fileInfoHolder.FilesProcessedCount * 100 / fileInfoHolder.FilesTotalCount);
-                    //BackgroundWorkerSearchFiles.ReportProgress(progress, foundFiles);
-                    fileInfoHolder.FoundFiles.Clear();
+                    _fileSearchInfoHolder.FilesProcessedCount += files.LongCount();
+                    //int progress = (int)(_fileSearchInfoHolder.FilesProcessedCount * 100 / _fileSearchInfoHolder.FilesTotalCount);
+                    _fileSearchInfoHolder.FoundFiles.Clear();
                 }
 
                 if (subdirectories.LongCount() > 0)
                 {
                     foreach (string subdirectory in subdirectories)
                     {
-                        CalculateFilesCountRecursively(subdirectory, _actionMode, fileInfoHolder, token);
+                        CalculateFilesCountRecursively(subdirectory, state, token);
+                        if (token.IsCancellationRequested)
+                        {
+                            if (state == States.EstimateProccess)
+                            {
+                                State = States.EstimateCanceled;
+                            }
+                            if (state == States.FilesSearchProccess)
+                            {
+                                State = States.FilesSearchCanceled;
+                            }
+                            return;
+                        }
                     }
                 }
             }
@@ -187,6 +280,7 @@ namespace Model
                 // TODO: обработать исключение при необходимости...
             }
         }
+
 
         #endregion
 

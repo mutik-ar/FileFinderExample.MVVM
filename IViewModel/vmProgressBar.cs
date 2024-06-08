@@ -10,6 +10,7 @@ namespace Interfaces.ViewModel
         #region Fields
 
         //private string _text;
+        private bool _isIndeterminate;
 
         #endregion
 
@@ -20,25 +21,23 @@ namespace Interfaces.ViewModel
             //_text = string.Empty;
         }
 
-        public vmProgressBar(string text)
-        {
-            //_text = text;
-        }
 
 
         #endregion
 
         #region Properties
 
-        //public string Text
-        //{
-        //    get { return _text; }
-        //    set
-        //    {
-        //        _text = value;
-        //        OnPropertyChanged();
-        //    }
-        //}
+        public bool IsIndeterminate
+        {
+            get { return _isIndeterminate; }
+            set
+            {
+                _isIndeterminate = value;
+                OnPropertyChanged();
+            }
+        }
+
+
 
         #endregion
 

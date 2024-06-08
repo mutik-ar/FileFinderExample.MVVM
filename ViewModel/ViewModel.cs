@@ -110,7 +110,7 @@ namespace ViewModel
             StartSearch.Content = _contentStartSearch;
             FilesCount.IsVisible = ProgressText.IsVisible = ProgressBar.IsVisible = false;
  
-    }
+        }
 
 
     #endregion
@@ -192,24 +192,60 @@ namespace ViewModel
 
         private void Model_Changed(object? sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(_model.IsRunning))
-            {
-
-                StartSearch.Content = _model.IsRunning ? _contentStopSearch: _contentStartSearch;
-                Drives.IsEnabled = !_model.IsRunning;
-                FileNameMask.IsEnabled = SearchPath.IsEnabled = FileNameMask.IsEnabled = !_model.IsRunning;
-                if (_model.IsRunning)
-                {
-                    ProgressText.IsVisible = FilesCount.IsVisible = ProgressBar.IsVisible = true;
-                }
-                else
-                {
-                    ProgressText.IsVisible = FilesCount.IsVisible = ProgressBar.IsVisible = false;
-                }
-            }
             if (e.PropertyName == nameof(_model.FilesTotalCount))
             {
-                FilesCount.Text = _model.FilesTotalCount.ToString();
+                FilesCount.Text = $"Найдено: {_model.FilesTotalCount} файлов.";
+            }
+            if (e.PropertyName == nameof(_model.FilesFound))
+            {
+                FilesCount.Text = $"Найдено: {_model.FilesFound} файлов.";
+            }
+            if (e.PropertyName == nameof(_model.State))
+            {
+                switch (_model.State)
+                {
+                    case States.Start:
+                        ProgressText.Text = "";
+                        break;
+                    case States.EstimateProccess:
+                        ProgressText.Text = "Оценка количества файлов в каталоге в процессе...";
+                        ProgressText.IsVisible = FilesCount.IsVisible = ProgressBar.IsVisible = true;
+                        StartSearch.Content = _contentStopSearch;
+                        Drives.IsEnabled = FileNameMask.IsEnabled = SearchPath.IsEnabled = FileNameMask.IsEnabled = false;
+                        ProgressBar.IsIndeterminate = true;
+                        break;
+                    case States.EstimateComplited:
+                        ProgressText.Text = "Оценка количества файлов в каталоге завершена...";
+                        break;
+                    case States.EstimateCanceled:
+                        ProgressText.Text = "Оценка количества файлов в каталоге прервана...";
+                        StartSearch.Content = _contentStartSearch;
+                        Drives.IsEnabled = FileNameMask.IsEnabled = SearchPath.IsEnabled = FileNameMask.IsEnabled = true;
+                        ProgressBar.IsIndeterminate = false;
+                        break;
+                    case States.FilesSearchProccess:
+                        ProgressText.Text = "Подсчёт количества файлов в системе, согласно маске в процессе ...";
+                        StartSearch.Content = _contentStopSearch;
+                        Drives.IsEnabled = FileNameMask.IsEnabled = SearchPath.IsEnabled = FileNameMask.IsEnabled = false;
+                        ProgressBar.IsIndeterminate = false;
+                        break;
+                    case States.FilesSearchComplited:
+                        ProgressText.Text = "Подсчёт количества файлов в системе, согласно маске завершен ...";
+                        break;
+                    case States.FilesSearchCanceled:
+                        ProgressText.Text = "Подсчёт количества файлов в системе, согласно маске прерван ...";
+                        StartSearch.Content = _contentStartSearch;
+                        Drives.IsEnabled = FileNameMask.IsEnabled = SearchPath.IsEnabled = FileNameMask.IsEnabled = true;
+                        ProgressBar.IsIndeterminate = false;
+                        break;
+                    case States. Finish:
+                        ProgressText.Text = "Процесс успешно завершен";
+                        StartSearch.Content = _contentStartSearch;
+                        Drives.IsEnabled = FileNameMask.IsEnabled = SearchPath.IsEnabled = FileNameMask.IsEnabled = true;
+                        ProgressBar.IsIndeterminate = false;
+                        break;
+                }
+
             }
         }
 

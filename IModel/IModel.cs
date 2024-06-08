@@ -16,9 +16,9 @@ namespace Interfaces.Model
 
         #region Properties
         ObservableCollection<DriveInfoItem> DrivesList { get; }
-
-        public bool IsRunning { get; set; }
-        public long FilesTotalCount { get; set; }
+        long FilesTotalCount { get; set; }
+        long FilesFound { get; set; }
+        States  State {get; set;}
 
         #endregion
 
@@ -30,7 +30,7 @@ namespace Interfaces.Model
 
         #region Event
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+        event PropertyChangedEventHandler? PropertyChanged;
 
         #endregion
 

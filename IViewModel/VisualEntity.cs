@@ -1,5 +1,6 @@
-﻿
-namespace Shared
+﻿using Shared;
+
+namespace Interfaces.ViewModel
 {
     public class VisualEntity : Entity
     {

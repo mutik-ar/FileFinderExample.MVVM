@@ -1,15 +1,10 @@
 ﻿
-using Shared;
-
-
 namespace Interfaces.ViewModel
 {
-    public class vmTextBlock : VisualEntity
+    public class vmTextBlock : TextEntity
     {
 
         #region Fields
-
-        private string _text;
 
         #endregion
 
@@ -17,28 +12,16 @@ namespace Interfaces.ViewModel
 
         public vmTextBlock()
         {
-            _text = string.Empty;
         }
 
-        public vmTextBlock(string text)
+        public vmTextBlock(string text) : base(text)
         {
-            _text = text;
         }
 
 
         #endregion
 
         #region Properties
-
-        public string Text
-        {
-            get { return _text; }
-            set
-            {
-                _text = value;
-                OnPropertyChanged();
-            }
-        }
 
         #endregion
 

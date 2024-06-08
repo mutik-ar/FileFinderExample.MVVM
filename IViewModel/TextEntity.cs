@@ -1,25 +1,28 @@
 ﻿
+using Shared;
+
+
 namespace Interfaces.ViewModel
 {
-    public class vmButton : VisualEntity
+    public class TextEntity : VisualEntity
     {
 
         #region Fields
 
-        private string _content;
+        private string _text;
 
         #endregion
 
         #region Constructors
 
-        public vmButton()
+        public TextEntity()
         {
-            _content = string.Empty;
+            _text = string.Empty;
         }
 
-        public vmButton(string content)
+        public TextEntity(string text)
         {
-            _content = content;
+            _text = text;
         }
 
 
@@ -27,12 +30,12 @@ namespace Interfaces.ViewModel
 
         #region Properties
 
-        public string Content
+        public string Text
         {
-            get { return _content; }
+            get { return _text; }
             set
             {
-                _content = value;
+                _text = value;
                 OnPropertyChanged();
             }
         }

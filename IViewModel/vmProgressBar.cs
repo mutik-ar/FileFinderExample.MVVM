@@ -1,10 +1,7 @@
 ﻿
-using Shared;
-
-
 namespace Interfaces.ViewModel
 {
-    public class vmProgressBar : VisualEntity
+    public class vmProgressBar : TextEntity
     {
 
         #region Fields
@@ -18,10 +15,11 @@ namespace Interfaces.ViewModel
 
         public vmProgressBar()
         {
-            //_text = string.Empty;
         }
 
-
+        public vmProgressBar(string text) : base(text)
+        {
+        }
 
         #endregion
 

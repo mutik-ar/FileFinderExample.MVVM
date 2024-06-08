@@ -13,7 +13,6 @@ namespace Model
         private ObservableCollection<DriveInfoItem> _drivesList = new();
         // Контекстный объект, содержащий необходимые свойства для обмена данными между формой и потоками для объектов BackgroundWorker        
         private FileSearchInfo _fileSearchInfoHolder = new();
-        CancellationTokenSource tokenSource;
 
 
         #endregion
@@ -110,13 +109,13 @@ namespace Model
                     break;
                 case States.EstimateProccess:
                     BlockAction = true;
-                    tokenSource?.Cancel();
+                    State = States.EstimateCanceled;
                     break;
                 case States.EstimateComplited:
                     break;
                 case States.FilesSearchProccess:
                     BlockAction = true;
-                    tokenSource?.Cancel();
+                    State = States.FilesSearchCanceled;
                     break;
                 case States.FilesSearchComplited:
                     break;
@@ -129,12 +128,11 @@ namespace Model
 
             if (State == States.EstimateProccess || State == States.FilesSearchProccess)
             {
-                tokenSource = new();
                 Task.Run(() =>
                 {
                     if (State == States.EstimateProccess)
                     {
-                        CalculateFilesCountRecursively(_fileSearchInfoHolder.SearchDirectory, State, tokenSource.Token);
+                        CalculateFilesCountRecursively(_fileSearchInfoHolder.SearchDirectory, State);
                         if (State == States.EstimateProccess)
                         {
                             State = States.EstimateComplited;
@@ -146,7 +144,7 @@ namespace Model
                         {
                             State = States.FilesSearchProccess;
                         }
-                        CalculateFilesCountRecursively(_fileSearchInfoHolder.SearchDirectory, State, tokenSource.Token);
+                        CalculateFilesCountRecursively(_fileSearchInfoHolder.SearchDirectory, State);
                         if (State == States.FilesSearchProccess)
                         {
                             State = States.FilesSearchComplited;
@@ -170,20 +168,12 @@ namespace Model
         /// <param name="parentDirectory">родительская директория, с которой необходимо начать рекурсивный обход вложенных директорий и файлов</param>
         /// <param name="workerMode">режим работы объектов BackgroundWorker: Estimate - оценка времени поиска в каталоге, Search - сам поиск</param>
         /// <param name="fileInfoHolder">контекстный объект, содержащий необходимые свойства для обеспечения оценки поиска и самого поиска</param>
-        private void CalculateFilesCountRecursively(String parentDirectory, States state, CancellationToken token)
+        private void CalculateFilesCountRecursively(String parentDirectory, States state)
         {
             try
             {
-                if (token.IsCancellationRequested)
+                if (State == States.EstimateCanceled  || State == States.FilesSearchCanceled)
                 {
-                    if (state == States.EstimateProccess)
-                    {
-                        State = States.EstimateCanceled;
-                    }
-                    if (state == States.FilesSearchProccess)
-                    {
-                        State = States.FilesSearchCanceled;
-                    }
                     return; 
                 }
                 IEnumerable<string> subdirectories = Directory.EnumerateDirectories(parentDirectory, "*", SearchOption.TopDirectoryOnly);
@@ -202,16 +192,8 @@ namespace Model
 
                     foreach (string file in files)
                     {
-                        if (token.IsCancellationRequested)
+                        if (State == States.EstimateCanceled || State == States.FilesSearchCanceled)
                         {
-                            if (state == States.EstimateProccess)
-                            {
-                                State = States.EstimateCanceled;
-                            }
-                            if (state == States.FilesSearchProccess)
-                            {
-                                State = States.FilesSearchCanceled;
-                            }
                             return;
                         }
                         if (file.Contains(_fileSearchInfoHolder.FileNameMask))
@@ -232,17 +214,9 @@ namespace Model
                 {
                     foreach (string subdirectory in subdirectories)
                     {
-                        CalculateFilesCountRecursively(subdirectory, state, token);
-                        if (token.IsCancellationRequested)
+                        CalculateFilesCountRecursively(subdirectory, state);
+                        if (State == States.EstimateCanceled || State == States.FilesSearchCanceled)
                         {
-                            if (state == States.EstimateProccess)
-                            {
-                                State = States.EstimateCanceled;
-                            }
-                            if (state == States.FilesSearchProccess)
-                            {
-                                State = States.FilesSearchCanceled;
-                            }
                             return;
                         }
                     }

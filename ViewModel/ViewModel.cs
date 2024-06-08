@@ -194,11 +194,11 @@ namespace ViewModel
         {
             if (e.PropertyName == nameof(_model.FilesTotalCount))
             {
-                FilesCount.Text = $"Найдено: {_model.FilesTotalCount} файлов. Статус: {_model.State}";
+                FilesCount.Text = $"Найдено: {_model.FilesTotalCount} файлов.";
             }
             if (e.PropertyName == nameof(_model.FilesFound))
             {
-                FilesCount.Text = $"Найдено: {_model.FilesFound} файлов. Статус: {_model.State}";
+                FilesCount.Text = $"Найдено: {_model.FilesFound} файлов.";
             }
             if (e.PropertyName == nameof(_model.State))
             {

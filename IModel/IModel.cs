@@ -19,7 +19,7 @@ namespace Interfaces.Model
         long FilesTotalCount { get; set; }
         long FilesFound { get; set; }
         States  State {get; set;}
-
+        bool BlockAction { get; set; }
         #endregion
 
         #region Methods

@@ -194,11 +194,11 @@ namespace ViewModel
         {
             if (e.PropertyName == nameof(_model.FilesTotalCount))
             {
-                FilesCount.Text = $"Найдено: {_model.FilesTotalCount} файлов.";
+                FilesCount.Text = $"Найдено: {_model.FilesTotalCount} файлов. Статус: {_model.State}";
             }
             if (e.PropertyName == nameof(_model.FilesFound))
             {
-                FilesCount.Text = $"Найдено: {_model.FilesFound} файлов.";
+                FilesCount.Text = $"Найдено: {_model.FilesFound} файлов. Статус: {_model.State}";
             }
             if (e.PropertyName == nameof(_model.State))
             {
@@ -246,6 +246,10 @@ namespace ViewModel
                         break;
                 }
 
+            }
+            if (e.PropertyName == nameof(_model.BlockAction))
+            {
+                StartSearch.IsEnabled = !_model.BlockAction;
             }
         }
 

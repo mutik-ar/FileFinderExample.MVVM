@@ -15,16 +15,6 @@ namespace Model
         private FileSearchInfo _fileSearchInfoHolder = new();
         CancellationTokenSource tokenSource;
 
-        /// <summary>
-        /// Текущий режим работы BackgroundWorker элементов и рекурсивного обхода директорий: 
-        /// Estimate - происходит оценка времени на поиск
-        /// Search - происходит непосредственно поиск файлов по заданной маске
-        /// </summary>
-        enum ActionMode
-        {
-            Estimate,
-            Search
-        }
 
         #endregion
 
@@ -78,6 +68,20 @@ namespace Model
             }
         }
 
+        public bool BlockAction 
+        {
+            get
+            {
+                return _fileSearchInfoHolder.BlockAction;
+            }
+            set
+            {
+                _fileSearchInfoHolder.BlockAction = value;
+                OnPropertyChanged();
+            }
+        }
+
+
         #endregion
 
         #region Constructors
@@ -105,11 +109,13 @@ namespace Model
                     State = States.EstimateProccess;
                     break;
                 case States.EstimateProccess:
+                    BlockAction = true;
                     tokenSource?.Cancel();
                     break;
                 case States.EstimateComplited:
                     break;
                 case States.FilesSearchProccess:
+                    BlockAction = true;
                     tokenSource?.Cancel();
                     break;
                 case States.FilesSearchComplited:
@@ -150,6 +156,7 @@ namespace Model
                     {
                         State = States.Finish;
                     }
+                    BlockAction = false;
                 });
             }
         }

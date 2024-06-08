@@ -53,7 +53,8 @@
                      Width="700" Height="23" Text="{Binding Path=FileNameMask.Text, UpdateSourceTrigger=PropertyChanged}"
                      IsEnabled="{Binding Path=FileNameMask.IsEnabled, UpdateSourceTrigger=PropertyChanged}"/>
             <Button x:Name="ButtonStartSearch" Width="100" Margin="5" Height="23" 
-                    Content="{Binding Path=StartSearch.Content, UpdateSourceTrigger=PropertyChanged}" 
+                    Content="{Binding Path=StartSearch.Content, UpdateSourceTrigger=PropertyChanged}"
+                    IsEnabled="{Binding Path=StartSearch.IsEnabled, UpdateSourceTrigger=PropertyChanged}"
                     Command="{Binding FilesActionCommand}"></Button>
         </StackPanel>
         <StackPanel Grid.Row="5" Orientation="Horizontal" Grid.ColumnSpan="2">

@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.IO;
 using Interfaces.Model;
 using Shared;
@@ -41,18 +43,13 @@ namespace Model
             }
         }
 
-        public long FilesFound
+        public ObservableCollection<FileProperty> FilesFound
         {
             get
             {
                 return _fileSearchInfoHolder.FilesFound;
             }
-            set
-            {
-                _fileSearchInfoHolder.FilesFound = value;
-                OnPropertyChanged();
-            }
-        }
+         }
 
         public States State 
         {
@@ -80,6 +77,20 @@ namespace Model
             }
         }
 
+        public int FilesProcessedPercent
+        {
+            get
+            {
+                return _fileSearchInfoHolder.FilesProcessedPercent;
+            }
+            set
+            {
+                _fileSearchInfoHolder.FilesProcessedPercent = value;
+                OnPropertyChanged();
+            }
+        }
+
+
 
         #endregion
 
@@ -87,6 +98,7 @@ namespace Model
         public Model()
         {
             LoadAvailableDrivesInfo();
+            _fileSearchInfoHolder.FilesFound.CollectionChanged += OnCollectionChanged;
         }
         #endregion
 
@@ -100,11 +112,6 @@ namespace Model
                 case States.Start:
                 case States.EstimateCanceled:
                 case States.Finish:
-                    _fileSearchInfoHolder.SearchDirectory = searchDirectory;
-                    _fileSearchInfoHolder.FileNameMask = fileNameMask;
-                    FilesTotalCount = 0;
-                    FilesFound = 0;
-                    _fileSearchInfoHolder.FoundFiles.Clear();
                     State = States.EstimateProccess;
                     break;
                 case States.EstimateProccess:
@@ -120,8 +127,6 @@ namespace Model
                 case States.FilesSearchComplited:
                     break;
                 case States.FilesSearchCanceled:
-                    FilesFound = 0;
-                    _fileSearchInfoHolder.FoundFiles.Clear();
                     State = States.FilesSearchProccess;
                     break;
             }
@@ -132,6 +137,10 @@ namespace Model
                 {
                     if (State == States.EstimateProccess)
                     {
+                        _fileSearchInfoHolder.SearchDirectory = searchDirectory;
+                        _fileSearchInfoHolder.FileNameMask = fileNameMask;
+                        FilesFound.Clear();
+                        FilesTotalCount = 0;
                         CalculateFilesCountRecursively(_fileSearchInfoHolder.SearchDirectory, State);
                         if (State == States.EstimateProccess)
                         {
@@ -144,6 +153,9 @@ namespace Model
                         {
                             State = States.FilesSearchProccess;
                         }
+                        FilesFound.Clear();
+                        _fileSearchInfoHolder.FilesProcessedCount = 0;
+                        FilesProcessedPercent = 0;
                         CalculateFilesCountRecursively(_fileSearchInfoHolder.SearchDirectory, State);
                         if (State == States.FilesSearchProccess)
                         {
@@ -186,10 +198,6 @@ namespace Model
                 }
                 else if (state == States.FilesSearchProccess)
                 {
-
-                    // если было запрошено прерывание операции поиска - выходим из рекурсии
-                    List<string> foundFiles = new();
-
                     foreach (string file in files)
                     {
                         if (State == States.EstimateCanceled || State == States.FilesSearchCanceled)
@@ -198,16 +206,28 @@ namespace Model
                         }
                         if (file.Contains(_fileSearchInfoHolder.FileNameMask))
                         {
-                            _fileSearchInfoHolder.FoundFiles.Add(file);
-                            foundFiles.Add(file);
-                            FilesFound++;
+                            try
+                            {
+                                FileInfo fileInfo = new FileInfo(file);
+                                long fileSizeInBytes = fileInfo.Length;
+                                _fileSearchInfoHolder.FilesFound.Add(new FileProperty() { Path = file, Size = fileSizeInBytes.ToString() });
+                            }
+                            catch (FileNotFoundException fileNotFoundException)
+                            {
+                                //TODO: обработать исключение при необходимости...
+                            }
                         }
                     }
 
-
                     _fileSearchInfoHolder.FilesProcessedCount += files.LongCount();
-                    //int progress = (int)(_fileSearchInfoHolder.FilesProcessedCount * 100 / _fileSearchInfoHolder.FilesTotalCount);
-                    _fileSearchInfoHolder.FoundFiles.Clear();
+                    if (_fileSearchInfoHolder.FilesTotalCount > 0)
+                    {
+                        FilesProcessedPercent = (int)(_fileSearchInfoHolder.FilesProcessedCount * 100 / _fileSearchInfoHolder.FilesTotalCount);
+                    }
+                    else
+                    {
+                        FilesProcessedPercent = 0;
+                    }
                 }
 
                 if (subdirectories.LongCount() > 0)
@@ -250,6 +270,17 @@ namespace Model
                 _drivesList.Add(new DriveInfoItem(driveInfo));
             }
         }
+
+        /// <summary>
+        /// Обработка события изменения коллекции 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged("FilesFound");
+        }
+
 
     }
 }

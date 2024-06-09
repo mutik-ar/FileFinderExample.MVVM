@@ -80,6 +80,7 @@
         </StackPanel>
         <ProgressBar x:Name="ProgressBarMain" Grid.Row="8" Width="800" Height="23" Margin="5" Grid.ColumnSpan="2"
                      Visibility="{Binding Path=ProgressBar.IsVisible, Converter={StaticResource BoolToVisibleConverter}}"
-                     IsIndeterminate="{Binding Path=ProgressBar.IsIndeterminate, UpdateSourceTrigger=PropertyChanged}"/>
+                     IsIndeterminate="{Binding Path=ProgressBar.IsIndeterminate, UpdateSourceTrigger=PropertyChanged}"
+                     Value="{Binding Path=ProgressBar.Value, UpdateSourceTrigger=PropertyChanged}"/>
     </Grid>
 </Window>

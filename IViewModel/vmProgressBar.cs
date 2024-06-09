@@ -8,6 +8,7 @@ namespace Interfaces.ViewModel
 
         //private string _text;
         private bool _isIndeterminate;
+        private int _value;
 
         #endregion
 
@@ -31,6 +32,15 @@ namespace Interfaces.ViewModel
             set
             {
                 _isIndeterminate = value;
+                OnPropertyChanged();
+            }
+        }
+        public int Value
+        {
+            get { return _value; }
+            set
+            {
+                _value = value;
                 OnPropertyChanged();
             }
         }

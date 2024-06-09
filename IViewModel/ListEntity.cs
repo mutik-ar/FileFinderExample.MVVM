@@ -68,5 +68,31 @@ namespace Interfaces.ViewModel
         }
 
         #endregion
+
+        #region public Methods
+
+        public void Add(T item)
+        {
+            _list.Add(item);
+            OnPropertyChanged();
+        }
+
+        public void Remove(T item)
+        {
+            _list.Remove(item);
+            OnPropertyChanged();
+        }
+        public void RemoveAt(int index)
+        {
+            _list.RemoveAt(index);
+            OnPropertyChanged();
+        }
+        public void Clear()
+        {
+            _list.Clear();
+            OnPropertyChanged();
+        }
+
+        #endregion
     }
 }

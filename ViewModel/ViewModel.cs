@@ -24,6 +24,7 @@ namespace ViewModel
         private string _contentStopSearch = "Прервать";
         private string _contentStartSearch = "Начать поиск";
         private ActionCommand _filesActionCommand;
+        private vmListView<FileProperty> _listViewFoundFiles;
 
         #endregion
 
@@ -96,6 +97,16 @@ namespace ViewModel
             }
         }
 
+        
+
+        public vmListView<FileProperty> ListViewFoundFiles
+        {
+            get
+            {
+                return _listViewFoundFiles ?? (_listViewFoundFiles = new vmListView<FileProperty>(_model.FilesFound));
+            }
+
+        }
 
         #endregion
 
@@ -109,6 +120,7 @@ namespace ViewModel
             _model.PropertyChanged += Model_Changed;
             StartSearch.Content = _contentStartSearch;
             FilesCount.IsVisible = ProgressText.IsVisible = ProgressBar.IsVisible = false;
+
  
         }
 
@@ -198,7 +210,11 @@ namespace ViewModel
             }
             if (e.PropertyName == nameof(_model.FilesFound))
             {
-                FilesCount.Text = $"Найдено: {_model.FilesFound} файлов.";
+                FilesCount.Text = $"Найдено: {_model.FilesFound.Count} файлов.";
+            }
+            if (e.PropertyName == nameof(_model.FilesProcessedPercent))
+            {
+                ProgressBar.Value = _model.FilesProcessedPercent;
             }
             if (e.PropertyName == nameof(_model.State))
             {

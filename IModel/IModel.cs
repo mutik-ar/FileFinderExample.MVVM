@@ -17,9 +17,10 @@ namespace Interfaces.Model
         #region Properties
         ObservableCollection<DriveInfoItem> DrivesList { get; }
         long FilesTotalCount { get; set; }
-        long FilesFound { get; set; }
+        ObservableCollection<FileProperty> FilesFound { get; }
         States  State {get; set;}
         bool BlockAction { get; set; }
+        public int FilesProcessedPercent { get; set; }
         #endregion
 
         #region Methods

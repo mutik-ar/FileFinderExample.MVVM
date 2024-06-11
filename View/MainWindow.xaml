@@ -60,7 +60,7 @@
         <StackPanel Grid.Row="5" Orientation="Horizontal" Grid.ColumnSpan="2">
             <TextBlock x:Name="LabelFoundFilesList" HorizontalAlignment="Left" Margin="5"  TextWrapping="Wrap" Text="Список найденных файлов:" VerticalAlignment="Center" Width="700" Height="23"/>
         </StackPanel>
-        <ListView x:Name="ListViewFoundFiles" Grid.Row="6" Height="270" Width="800" Margin="5" Grid.ColumnSpan="2" >
+        <ListView x:Name="ListViewFoundFiles" Grid.Row="6" Height="270" Width="800" Margin="5" Grid.ColumnSpan="2" ItemsSource="{Binding Path=ListViewFoundFiles.List}">
             <ListView.View>
                 <GridView>
                     <GridView.Columns>

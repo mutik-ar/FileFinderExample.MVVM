@@ -44,6 +44,11 @@ namespace Interfaces.ViewModel
             {
                 return _list;
             }
+            set
+            {
+                _list = value;
+                OnPropertyChanged();
+            }
 
         }
 

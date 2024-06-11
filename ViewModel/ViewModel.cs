@@ -103,7 +103,7 @@ namespace ViewModel
         {
             get
             {
-                return _listViewFoundFiles ?? (_listViewFoundFiles = new vmListView<FileProperty>(_model.FilesFound));
+                return _listViewFoundFiles ?? (_listViewFoundFiles = new vmListView<FileProperty>());
             }
 
         }
@@ -211,6 +211,7 @@ namespace ViewModel
             if (e.PropertyName == nameof(_model.FilesFound))
             {
                 FilesCount.Text = $"Найдено: {_model.FilesFound.Count} файлов.";
+                ListViewFoundFiles.List = new(_model.FilesFound); 
             }
             if (e.PropertyName == nameof(_model.FilesProcessedPercent))
             {

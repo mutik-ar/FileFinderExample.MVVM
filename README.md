@@ -2,9 +2,11 @@
 
 Цель2: Использовать асинхронное программирование для длительных задач по поиску файлов по шаблону.
 
-Данный проект является портированием проекта "Пишем на C# программу для поиска файлов, используя ProgressBar и BackgroundWorker" https://allineed.ru/development/dotnet-development/charp-development/89-csharp-program-for-searching-files
+Данный проект является портированием проекта "Пишем на C# программу для поиска файлов, используя ProgressBar и BackgroundWorker" https://allineed.ru/development/dotnet-development/charp-development/89-csharp-program-for-searching-files. Так же был использован проект https://github.com/daiplusplus/ShellFileDialogs, реализующий FolderBrowserDialogSelectSearchDirectory, так как данного функционала нет в .Net.
 
-Исходный проект реализован на .Net Framework4.0, Windows Forms, BackgroundWorker. Моя задача была реализовать данный проект на современных технологиях и подходах.
+Проект, который я взял за основу, реализован на .Net Framework4.0, Windows Forms, BackgroundWorker. 
+
+Моя задача была реализовать данный проект на современных технологиях и подходах.
 
 Что получилось:
 

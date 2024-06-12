@@ -3,19 +3,27 @@ using Interfaces.ViewModel;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Registration;
+using System.Windows;
 
 namespace FileFinderExample
 {
     public partial class Program
     {
-        public IModel? Model { get; set; }
+        public IModel Model { get; set; }
         public IViewModel ViewModel { get; set; }
 
         [STAThread]
         public static void Main()
         {
-            Program program = new Program();
-            program.Composite();
+            try
+            {
+                Program program = new Program();
+                program.Composite();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         public void Composite()

@@ -127,7 +127,18 @@ namespace Model
                 case States.FilesSearchComplited:
                     break;
                 case States.FilesSearchCanceled:
-                    State = States.FilesSearchProccess;
+                    if (
+                        _fileSearchInfoHolder.SearchDirectory == searchDirectory
+                        &&
+                        _fileSearchInfoHolder.FileNameMask == fileNameMask
+                       )
+                    {
+                        State = States.FilesSearchProccess;
+                    }
+                    else
+                    {
+                        State = States.EstimateProccess;
+                    }
                     break;
             }
 

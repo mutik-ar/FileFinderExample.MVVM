@@ -12,3 +12,4 @@
 
 Платформа .Net6.0, WPF, архитектурный шаблон MVVM, принципы SOLID, асинхронная обработка длительных операций на основе Task.
 
+![image](https://github.com/mutik-ar/FileFinderExample.MVVM/assets/90051513/aad565b6-becf-421a-bcaf-2d931b61a46f)

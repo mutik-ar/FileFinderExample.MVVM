@@ -11,4 +11,8 @@
     <ProjectReference Include="..\IViewModel\IViewModel.csproj" />
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy &quot;$(TargetDir)\$(TargetName).*&quot; &quot;..\Application\bin\Debug\net6.0-windows\&quot; /Y" />
+  </Target>
+
 </Project>

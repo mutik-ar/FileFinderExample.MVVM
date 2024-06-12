@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:v="clr-namespace:View"
         mc:Ignorable="d"
-        Title="Пример поиска файлов в системе с помощью элементов BackgroundWorker" 
+        Title="Пример поиска файлов в системе." 
         Background="#FFECECEC" 
         SizeToContent="WidthAndHeight" 
         ResizeMode="NoResize">

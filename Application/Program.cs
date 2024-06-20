@@ -12,7 +12,7 @@ namespace FileFinderExample
         public IModel Model { get; set; }
         public IViewModel ViewModel { get; set; }
 
-        [STAThread]
+        [STAThread] // Вызывающим потоком должен быть STA, поскольку этого требуют большинство компонентов UI.
         public static void Main()
         {
             try

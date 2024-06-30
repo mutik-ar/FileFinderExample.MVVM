@@ -118,13 +118,23 @@ namespace ViewModel
 
         #region Constructor
 
-        public ViewModel(IModel model)
+        public ViewModel(IModel model, RefreshMode refreshMode) //
         {
             _model = model;
             Drives.PropertyChanged += Drives_Changed;
             Drives.SelectedIndex = 0;
-            //_model.PropertyChanged += OnModelChanged;
-            SetTimer(100); // запуск таймера  с интервалом 0.5 и обновление UI через список измененных свойств
+            switch (refreshMode.mode)
+            {
+                case Mode.Events:
+                    _model.PropertyChanged += OnModelChanged; // обновление UI через события
+                    break;
+                case Mode.Timer:
+                    SetTimer(refreshMode.interval); // запуск таймера  с интервалом 0.5 и обновление UI через список измененных свойств
+                    break;
+                case Mode.Refresh:
+                    // обновление UI через вызов процедуры Refresh 
+                    break;
+            }
             StartSearch.Content = _contentStartSearch;
             FilesCount.IsVisible = ProgressText.IsVisible = ProgressBar.IsVisible = false;
  

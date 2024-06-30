@@ -20,6 +20,8 @@ namespace Interfaces.ViewModel
 
         void UpdateSearchPathReadonlyTextBox(string searchPath);
 
+        public void Refresh();
+
         #endregion
 
     }

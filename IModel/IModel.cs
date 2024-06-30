@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Shared;
 
 namespace Interfaces.Model
 {
@@ -21,11 +19,14 @@ namespace Interfaces.Model
         States  State {get; set;}
         bool BlockAction { get; set; }
         public int FilesProcessedPercent { get; set; }
+        public ListAdv<string> PropertyChangedList { get; }
+
         #endregion
 
         #region Methods
 
         void FilesAction(string searchDirectory, string fileNameMask);
+
 
         #endregion
 

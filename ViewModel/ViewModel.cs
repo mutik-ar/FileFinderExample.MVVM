@@ -1,6 +1,9 @@
 ﻿using System.ComponentModel;
 using Interfaces.ViewModel;
 using Interfaces.Model;
+using System.Timers;
+using Shared;
+
 
 
 
@@ -25,6 +28,9 @@ namespace ViewModel
         private string _contentStartSearch = "Начать поиск";
         private ActionCommand _filesActionCommand;
         private vmListView<FileProperty> _listViewFoundFiles;
+
+        private System.Timers.Timer _timer;
+
 
         #endregion
 
@@ -117,10 +123,10 @@ namespace ViewModel
             _model = model;
             Drives.PropertyChanged += Drives_Changed;
             Drives.SelectedIndex = 0;
-            _model.PropertyChanged += Model_Changed;
+            //_model.PropertyChanged += OnModelChanged;
+            SetTimer(100); // запуск таймера  с интервалом 0.5 и обновление UI через список измененных свойств
             StartSearch.Content = _contentStartSearch;
             FilesCount.IsVisible = ProgressText.IsVisible = ProgressBar.IsVisible = false;
-
  
         }
 
@@ -201,23 +207,26 @@ namespace ViewModel
 
             }
         }
-
-        private void Model_Changed(object? sender, PropertyChangedEventArgs e)
+        private void OnModelChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(_model.FilesTotalCount))
+            Model_Changed(e.PropertyName);
+        }
+        private void Model_Changed(string propertyName)
+        {
+            if (propertyName == nameof(_model.FilesTotalCount))
             {
                 FilesCount.Text = $"Найдено: {_model.FilesTotalCount} файлов.";
             }
-            if (e.PropertyName == nameof(_model.FilesFound))
+            if (propertyName == nameof(_model.FilesFound))
             {
                 FilesCount.Text = $"Найдено: {_model.FilesFound.Count} файлов.";
                 ListViewFoundFiles.List = new(_model.FilesFound); 
             }
-            if (e.PropertyName == nameof(_model.FilesProcessedPercent))
+            if (propertyName == nameof(_model.FilesProcessedPercent))
             {
                 ProgressBar.Value = _model.FilesProcessedPercent;
             }
-            if (e.PropertyName == nameof(_model.State))
+            if (propertyName == nameof(_model.State))
             {
                 switch (_model.State)
                 {
@@ -264,11 +273,46 @@ namespace ViewModel
                 }
 
             }
-            if (e.PropertyName == nameof(_model.BlockAction))
+            if (propertyName == nameof(_model.BlockAction))
             {
                 StartSearch.IsEnabled = !_model.BlockAction;
             }
         }
+
+
+        private void SetTimer(double interval)
+        {
+            // Create a timer with a two second interval.
+            _timer = new System.Timers.Timer(interval);
+            // Hook up the Elapsed event for the timer. 
+            _timer.Elapsed += OnTimedEvent;
+            _timer.AutoReset = true;
+            _timer.Enabled = true;
+        }
+
+        private void OnTimedEvent(Object source, ElapsedEventArgs e)
+        {
+            //Console.WriteLine("The Elapsed event was raised at {0:HH:mm:ss.fff}", e.SignalTime);
+            //       The Elapsed event was raised at 09:40:31.084
+            Refresh();
+
+        }
+
+        /// <summary>
+        /// Обновление свойств ViewModel при запросе
+        /// </summary>
+        public void Refresh() 
+        {
+            ListAdv<string> list = new(_model.PropertyChangedList);
+            _model.PropertyChangedList.Clear();
+
+            for (int i = 0; i < list.Count(); i++)
+            {
+                Model_Changed(list[i]);
+            }
+
+        }
+
 
         #endregion
     }

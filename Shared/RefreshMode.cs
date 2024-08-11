@@ -11,7 +11,7 @@ namespace Shared
     {
         RefreshMode()
         {
-            this.mode = Mode.Events;
+            this.mode = Mode.Timer;
             this.interval = 500;
         }
 

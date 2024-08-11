@@ -3,6 +3,8 @@ using Interfaces.ViewModel;
 using Interfaces.Model;
 using System.Timers;
 using Shared;
+using System.Collections.ObjectModel;
+using System.Net.Http.Headers;
 
 
 
@@ -28,6 +30,7 @@ namespace ViewModel
         private string _contentStartSearch = "Начать поиск";
         private ActionCommand _filesActionCommand;
         private vmListView<FileProperty> _listViewFoundFiles;
+        private object _lock = new();
 
         private System.Timers.Timer _timer;
 
@@ -230,7 +233,7 @@ namespace ViewModel
             if (propertyName == nameof(_model.FilesFound))
             {
                 FilesCount.Text = $"Найдено: {_model.FilesFound.Count} файлов.";
-                ListViewFoundFiles.List = new(_model.FilesFound); 
+                ListViewFoundFiles.List = CloneSafety(_model.FilesFound);
             }
             if (propertyName == nameof(_model.FilesProcessedPercent))
             {
@@ -305,7 +308,6 @@ namespace ViewModel
             //Console.WriteLine("The Elapsed event was raised at {0:HH:mm:ss.fff}", e.SignalTime);
             //       The Elapsed event was raised at 09:40:31.084
             Refresh();
-
         }
 
         /// <summary>
@@ -313,7 +315,14 @@ namespace ViewModel
         /// </summary>
         public void Refresh() 
         {
-            ListAdv<string> list = new(_model.PropertyChangedList);
+            ListAdv<string> list = new();
+            int index = 0;
+            while (index < _model.PropertyChangedList.Count)
+            {
+                list.Add(_model.PropertyChangedList[index]);
+                index++;
+            }
+
             _model.PropertyChangedList.Clear();
 
             for (int i = 0; i < list.Count(); i++)
@@ -323,7 +332,21 @@ namespace ViewModel
 
         }
 
+        ObservableCollection<FileProperty> CloneSafety(ObservableCollection<FileProperty> filePropertiesIn)
+        {
+            ObservableCollection<FileProperty> filePropertiesOut = new();
+            int index = 0;
+            while (index < filePropertiesIn.Count)
+            {
+                FileProperty filePropertyOut = new FileProperty() { Path = filePropertiesIn[index].Path, Size = filePropertiesIn[index].Size };
+                filePropertiesOut.Add(filePropertyOut);
+                index++;
+            }
+            return filePropertiesOut;
+        }
+
 
         #endregion
+
     }
 }

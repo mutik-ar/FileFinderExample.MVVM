@@ -5,8 +5,6 @@ VisualStudioVersion = 17.9.34701.34
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FileFinderExample", "Application\FileFinderExample.csproj", "{C1F3DB19-4AC8-4FF7-9AC5-56753EBB5187}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShellFileDialogs", "..\ShellFileDialogs\ShellFileDialogs\ShellFileDialogs.csproj", "{175D12C7-E789-4DA6-8E55-166F276A3C62}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IModel", "IModel\IModel.csproj", "{E97A82EA-678F-46A5-8AA2-8DC778043542}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IViewModel", "IViewModel\IViewModel.csproj", "{E24BB892-0754-4E29-ACA6-FBA95F55F39C}"
@@ -19,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "Shared\Shared.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Model", "Model\Model.csproj", "{912F1F9A-E8DE-459F-926B-1FB4CC76E90E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShellFileDialogs", "ShellFileDialogs\ShellFileDialogs.csproj", "{6CF88B54-4DF5-4A42-BF36-E4DF1FAC2F6C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +29,6 @@ Global
 		{C1F3DB19-4AC8-4FF7-9AC5-56753EBB5187}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1F3DB19-4AC8-4FF7-9AC5-56753EBB5187}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1F3DB19-4AC8-4FF7-9AC5-56753EBB5187}.Release|Any CPU.Build.0 = Release|Any CPU
-		{175D12C7-E789-4DA6-8E55-166F276A3C62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{175D12C7-E789-4DA6-8E55-166F276A3C62}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{175D12C7-E789-4DA6-8E55-166F276A3C62}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{175D12C7-E789-4DA6-8E55-166F276A3C62}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E97A82EA-678F-46A5-8AA2-8DC778043542}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E97A82EA-678F-46A5-8AA2-8DC778043542}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E97A82EA-678F-46A5-8AA2-8DC778043542}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -57,6 +53,10 @@ Global
 		{912F1F9A-E8DE-459F-926B-1FB4CC76E90E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{912F1F9A-E8DE-459F-926B-1FB4CC76E90E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{912F1F9A-E8DE-459F-926B-1FB4CC76E90E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CF88B54-4DF5-4A42-BF36-E4DF1FAC2F6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CF88B54-4DF5-4A42-BF36-E4DF1FAC2F6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CF88B54-4DF5-4A42-BF36-E4DF1FAC2F6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CF88B54-4DF5-4A42-BF36-E4DF1FAC2F6C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

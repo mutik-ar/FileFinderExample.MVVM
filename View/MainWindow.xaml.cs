@@ -32,6 +32,10 @@ namespace View
             InitializeComponent();
             _viewModel = viewModel;
             DataContext = _viewModel;
+            if (_viewModel.RefreshMode.mode == Shared.Mode.Refresh)
+            {
+                SetTimer(_viewModel.RefreshMode.interval);
+            }
         }
 
         private void ButtonSelectSearchDirectory_Click(object sender, RoutedEventArgs e)
@@ -49,7 +53,7 @@ namespace View
 
         }
 
-        private void SetTimer(double interval)
+        private void SetTimer(int interval)
         {
             // Create a timer with a two second interval.
             _timer = new System.Timers.Timer(interval);

@@ -12,10 +12,10 @@ namespace Shared
         RefreshMode()
         {
             this.mode = Mode.Refresh;
-            this.interval = 500;
+            this.interval = 100;
         }
 
         public Mode mode { get; }
-        public double interval { get; }
+        public int interval { get; }
     }
 }

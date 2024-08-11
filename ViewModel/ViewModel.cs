@@ -75,14 +75,6 @@ namespace ViewModel
                 return _startSearch ?? (_startSearch = new());
             }
         }
-        public vmButton RefreshData
-        {
-            get
-            {
-                return _refreshData ?? (_refreshData = new());
-            }
-        }
-
         public vmTextBlock FilesCount
         {
             get
@@ -133,6 +125,8 @@ namespace ViewModel
 
         }
 
+        public RefreshMode RefreshMode { get; }
+
         #endregion
 
         #region Constructor
@@ -142,18 +136,17 @@ namespace ViewModel
             _model = model;
             Drives.PropertyChanged += Drives_Changed;
             Drives.SelectedIndex = 0;
-            RefreshData.IsVisible = false;
-            switch (refreshMode.mode)
+            RefreshMode = refreshMode;
+            switch (RefreshMode.mode)
             {
                 case Mode.Events:
                     _model.PropertyChanged += OnModelChanged; // обновление UI через события
                     break;
                 case Mode.Timer:
-                    SetTimer(refreshMode.interval); // запуск таймера  с интервалом 0.5 и обновление UI через список измененных свойств
+                    SetTimer(RefreshMode.interval); // запуск таймера  с интервалом 0.5 и обновление UI через список измененных свойств
                     break;
                 case Mode.Refresh:
                     // обновление UI через вызов процедуры Refresh 
-                    RefreshData.IsVisible = true;
                     break;
             }
             StartSearch.Content = _contentStartSearch;
@@ -312,7 +305,7 @@ namespace ViewModel
         }
 
 
-        private void SetTimer(double interval)
+        private void SetTimer(int interval)
         {
             // Create a timer with a two second interval.
             _timer = new System.Timers.Timer(interval);

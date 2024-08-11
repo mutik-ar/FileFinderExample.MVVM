@@ -1,4 +1,5 @@
 ﻿using Interfaces.Model;
+using Shared;
 
 namespace Interfaces.ViewModel
 {
@@ -8,7 +9,6 @@ namespace Interfaces.ViewModel
 
         vmComboBox<DriveInfoItem> Drives { get; }
         vmButton StartSearch { get; }
-        vmButton RefreshData { get; }
         vmTextBox SearchPath { get; }
         vmTextBox FileNameMask { get; }
         vmTextBlock FilesCount { get; }
@@ -16,6 +16,7 @@ namespace Interfaces.ViewModel
         vmProgressBar ProgressBar { get; }
         ActionCommand FilesActionCommand { get; }
         ActionCommand RefreshActionCommand { get; }
+        RefreshMode RefreshMode { get; }
 
         #endregion
 

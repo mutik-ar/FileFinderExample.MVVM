@@ -20,5 +20,9 @@
 		<PackageReference Include="System.ComponentModel.Composition.Registration" Version="8.0.0" />
 	</ItemGroup>
 
+	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+	  <Exec Command="dotnet build ..\Model\Model.csproj&#xD;&#xA;dotnet build ..\ViewModel\ViewModel.csproj" />
+	</Target>
+
 
 </Project>

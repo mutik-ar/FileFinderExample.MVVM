@@ -7,12 +7,15 @@ namespace Interfaces.ViewModel
         #region Properties
 
         vmComboBox<DriveInfoItem> Drives { get; }
+        vmButton StartSearch { get; }
+        vmButton RefreshData { get; }
         vmTextBox SearchPath { get; }
         vmTextBox FileNameMask { get; }
         vmTextBlock FilesCount { get; }
         vmTextBlock ProgressText { get; }
         vmProgressBar ProgressBar { get; }
         ActionCommand FilesActionCommand { get; }
+        ActionCommand RefreshActionCommand { get; }
 
         #endregion
 
@@ -20,7 +23,6 @@ namespace Interfaces.ViewModel
 
         void UpdateSearchPathReadonlyTextBox(string searchPath);
 
-        public void Refresh();
 
         #endregion
 

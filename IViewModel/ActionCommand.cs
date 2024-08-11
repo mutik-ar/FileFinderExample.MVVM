@@ -26,7 +26,7 @@ namespace Interfaces.ViewModel
         /// </summary>
         /// <param name="objectAction">An action that takes an object parameter.</param>
         /// <remarks>Use this constructor to provide an action that uses the object parameter passed by the Execute method.</remarks>
-        public ActionCommand(Action<object> objectAction)
+        public ActionCommand(Action<object> objectAction = null)
         {
             this.objectAction = objectAction;
         }
@@ -47,7 +47,7 @@ namespace Interfaces.ViewModel
         /// <returns>
         /// Always returns true.
         /// </returns>
-        bool ICommand.CanExecute(object parameter)
+        bool ICommand.CanExecute(object parameter = null)
         {
             return true;
         }
@@ -56,9 +56,9 @@ namespace Interfaces.ViewModel
         /// Defines the method to be called when the command is invoked.
         /// </summary>
         /// <param name="parameter">Data used by the command.  If the command does not require data to be passed, then this object can be set to null.</param>
-        public void Execute(object parameter)
+        public void Execute(object parameter = null)
         {
-            if (this.objectAction != null)
+            if (this.objectAction != null && parameter != null)
             {
                 this.objectAction(parameter);
             }

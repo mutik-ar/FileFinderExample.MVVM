@@ -4,7 +4,7 @@ using Interfaces.Model;
 using System.Timers;
 using Shared;
 using System.Collections.ObjectModel;
-using System.Net.Http.Headers;
+
 
 
 
@@ -23,12 +23,14 @@ namespace ViewModel
         private vmTextBox _searchPath;
         private vmTextBox _fileNameMask;
         private vmButton _startSearch;
+        private vmButton _refreshData;
         private vmTextBlock _filesCount;
         private vmTextBlock _progressText;
         private vmProgressBar _progressBar;
         private string _contentStopSearch = "Прервать";
         private string _contentStartSearch = "Начать поиск";
         private ActionCommand _filesActionCommand;
+        private ActionCommand _refreshActionCommand;
         private vmListView<FileProperty> _listViewFoundFiles;
         private object _lock = new();
 
@@ -73,6 +75,13 @@ namespace ViewModel
                 return _startSearch ?? (_startSearch = new());
             }
         }
+        public vmButton RefreshData
+        {
+            get
+            {
+                return _refreshData ?? (_refreshData = new());
+            }
+        }
 
         public vmTextBlock FilesCount
         {
@@ -106,7 +115,14 @@ namespace ViewModel
             }
         }
 
-        
+        public ActionCommand RefreshActionCommand
+        {
+            get
+            {
+                return _refreshActionCommand ?? (_refreshActionCommand = new(Refresh));
+            }
+        }
+
 
         public vmListView<FileProperty> ListViewFoundFiles
         {
@@ -126,6 +142,7 @@ namespace ViewModel
             _model = model;
             Drives.PropertyChanged += Drives_Changed;
             Drives.SelectedIndex = 0;
+            RefreshData.IsVisible = false;
             switch (refreshMode.mode)
             {
                 case Mode.Events:
@@ -136,6 +153,7 @@ namespace ViewModel
                     break;
                 case Mode.Refresh:
                     // обновление UI через вызов процедуры Refresh 
+                    RefreshData.IsVisible = true;
                     break;
             }
             StartSearch.Content = _contentStartSearch;
@@ -192,6 +210,7 @@ namespace ViewModel
         {
             _model.FilesAction(SearchPath.Text, FileNameMask.Text);
         }
+
 
         #endregion
 
@@ -313,7 +332,7 @@ namespace ViewModel
         /// <summary>
         /// Обновление свойств ViewModel при запросе
         /// </summary>
-        public void Refresh() 
+        void Refresh() 
         {
             ListAdv<string> list = new();
             int index = 0;

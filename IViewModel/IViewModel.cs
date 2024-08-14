@@ -7,6 +7,8 @@ namespace Interfaces.ViewModel
     {
         #region Properties
 
+        RefreshModes RefreshMode { get; }
+        int RefreshInterval { get; }
         vmComboBox<DriveInfoItem> Drives { get; }
         vmButton StartSearch { get; }
         vmTextBox SearchPath { get; }
@@ -17,7 +19,6 @@ namespace Interfaces.ViewModel
         vmProgressBar ProgressBar { get; }
         ActionCommand FilesActionCommand { get; }
         ActionCommand RefreshActionCommand { get; }
-        RefreshMode RefreshMode { get; }
 
         #endregion
 

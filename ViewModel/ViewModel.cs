@@ -37,12 +37,46 @@ namespace ViewModel
 
         private System.Timers.Timer _timer;
 
+        #endregion
+
+        #region Constructor
+
+        public ViewModel(IModel model, RefreshModes refreshMode, int refreshInterval) //
+        {
+            _model = model;
+            Drives.PropertyChanged += Drives_Changed;
+            Drives.SelectedIndex = 0;
+            RefreshMode = refreshMode;
+            RefreshInterval = refreshInterval;
+            string statusText = "Статус: обновление формы ";
+            switch (RefreshMode)
+            {
+                case RefreshModes.Events:
+                    _model.PropertyChanged += OnModelChanged; // обновление UI через события
+                    StatusText.Text = $"{statusText} через события";
+                    break;
+                case RefreshModes.Timer:
+                    SetTimer(refreshInterval); // запуск таймера  с интервалом 0.5 и обновление UI через список измененных свойств
+                    StatusText.Text = $"{statusText} через обновление модели с интервалом {RefreshInterval} мсек";
+                    break;
+                case RefreshModes.Refresh:
+                    // обновление UI через вызов процедуры Refresh 
+                    StatusText.Text = $"{statusText} запросом из формы к модели с интервалом {RefreshInterval} мсек";
+                    break;
+            }
+            StartSearch.Content = _contentStartSearch;
+            FilesCount.IsVisible = ProgressText.IsVisible = ProgressBar.IsVisible = false;
+
+        }
+
 
         #endregion
 
 
-
         #region Properties
+
+        public RefreshModes RefreshMode { get; }
+        public int RefreshInterval { get; }
 
         public vmComboBox<DriveInfoItem> Drives
         {
@@ -133,41 +167,7 @@ namespace ViewModel
 
         }
 
-        public RefreshMode RefreshMode { get; }
-
         #endregion
-
-        #region Constructor
-
-        public ViewModel(IModel model, RefreshMode refreshMode) //
-        {
-            _model = model;
-            Drives.PropertyChanged += Drives_Changed;
-            Drives.SelectedIndex = 0;
-            RefreshMode = refreshMode;
-            string statusText = "Статус: обновление формы ";
-            switch (RefreshMode.mode)
-            {
-                case Mode.Events:
-                    _model.PropertyChanged += OnModelChanged; // обновление UI через события
-                    StatusText.Text = $"{statusText} через события" ;
-                    break;
-                case Mode.Timer:
-                    SetTimer(RefreshMode.interval); // запуск таймера  с интервалом 0.5 и обновление UI через список измененных свойств
-                    StatusText.Text = $"{statusText} через обновление модели с интервалом {RefreshMode.interval} мсек";
-                    break;
-                case Mode.Refresh:
-                    // обновление UI через вызов процедуры Refresh 
-                    StatusText.Text = $"{statusText} запросом из формы к модели с интервалом {RefreshMode.interval} мсек";
-                    break;
-            }
-            StartSearch.Content = _contentStartSearch;
-            FilesCount.IsVisible = ProgressText.IsVisible = ProgressBar.IsVisible = false;
- 
-        }
-
-
-    #endregion
 
     #region Public Methods
 

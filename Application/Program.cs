@@ -1,14 +1,17 @@
 ﻿using Interfaces.Model;
 using Interfaces.ViewModel;
-using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Registration;
-using System.Reflection;
 using System.Windows;
 using Shared;
 
 namespace FileFinderExample
 {
+    public class ParametrsForViewModel
+    {
+        public RefreshModes RefreshMode { get; } = RefreshModes.Refresh; // Events, Timer, Refresh
+        public int RefreshInterval { get; } = 200; // мсек
+    }
     public partial class Program
     {
 
@@ -16,12 +19,6 @@ namespace FileFinderExample
         #endregion
 
         #region Properties
-        public IModel Model { get; set; }
-        public IViewModel ViewModel { get; set; }
-
-        //[Export(typeof(RefreshMode))]
-        public RefreshMode refreshMode { get; set; }
-
         #endregion
 
 
@@ -43,21 +40,17 @@ namespace FileFinderExample
         {
             var conventions = new RegistrationBuilder();
             conventions.ForTypesDerivedFrom<IModel>().Export<IModel>();
-            conventions.ForType<Program>().ImportProperty<IModel>(p => p.Model);
             conventions.ForTypesDerivedFrom<IViewModel>().Export<IViewModel>();
-            conventions.ForType<Program>().ImportProperty<IViewModel>(p => p.ViewModel);
-            RefreshMode.Interval = 500;
-            RefreshMode.Mode = Mode.Refresh;
-            conventions.ForType<RefreshMode>().Export<RefreshMode>();
-            conventions.ForType<Program>().ImportProperty<RefreshMode>(p => p.refreshMode);
-
+            conventions.ForType<ParametrsForViewModel>().ExportProperties(p => p.Name == "RefreshInterval");
+            conventions.ForType<ParametrsForViewModel>().ExportProperties(p => p.Name == "RefreshMode");
 
             var catalog = new AggregateCatalog();
             catalog.Catalogs.Add(new DirectoryCatalog(AppDomain.CurrentDomain.BaseDirectory, conventions));
-            CompositionService service = catalog.CreateCompositionService();
-            service.SatisfyImportsOnce(this, conventions);
 
-            View.MainWindow mainWindow = new(ViewModel);
+            CompositionContainer container = new CompositionContainer(catalog);
+            IViewModel viewModel = container.GetExportedValue<IViewModel>();
+
+            View.MainWindow mainWindow = new(viewModel);
             mainWindow.ShowDialog();
 
         }

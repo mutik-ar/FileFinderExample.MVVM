@@ -32,9 +32,9 @@ namespace View
             InitializeComponent();
             _viewModel = viewModel;
             DataContext = _viewModel;
-            if (_viewModel.RefreshMode.mode == Shared.Mode.Refresh)
+            if (_viewModel.RefreshMode == Shared.RefreshModes.Refresh)
             {
-                SetTimer(_viewModel.RefreshMode.interval);
+                SetTimer(_viewModel.RefreshInterval);
             }
         }
 

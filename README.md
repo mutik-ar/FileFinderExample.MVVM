@@ -14,12 +14,21 @@
 
 Компиляция:
 
+1 вариант:
+
 1 этап скопилировать проект Model (внешняя библиотека для FileFinderExample)
 
 2 этап скопилировать проект ViewModel (внешняя библиотека для FileFinderExample)
 
 3 этап скопилировать проект FileFinderExample
 
+2 вариант:
 
-![image](https://github.com/mutik-ar/FileFinderExample.MVVM/assets/90051513/b1cd67a6-a9e7-4a58-a681-de8f497947b5)
+Надо перекомпилировать (Rebuild) проект FileFinderExample. Срипт в проекте настроен так, чтобы перед компиляцией проекта FileFinderExample скопилируются проекты Model и  ViewModel
+
+
+![image](https://github.com/user-attachments/assets/d64b296b-3c92-4047-bd8d-e751e0e8b12a)
+
+
+
 

@@ -8,7 +8,8 @@
         Title="Пример поиска файлов в системе." 
         Background="#FFECECEC" 
         SizeToContent="WidthAndHeight" 
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <v:BoolToVisibilityConverter x:Key="BoolToVisibleConverter"/>
     </Window.Resources>

@@ -19,6 +19,7 @@ namespace Interfaces.ViewModel
         vmProgressBar ProgressBar { get; }
         ActionCommand FilesActionCommand { get; }
         ActionCommand RefreshActionCommand { get; }
+        vmListView<FileProperty> ListViewFoundFiles { get; }
 
         #endregion
 

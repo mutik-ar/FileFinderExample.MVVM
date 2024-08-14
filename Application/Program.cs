@@ -9,8 +9,8 @@ namespace FileFinderExample
 {
     public class ParametrsForViewModel
     {
-        public RefreshModes RefreshMode { get; } = RefreshModes.Events; // Events, Timer, Refresh
-        public int RefreshInterval { get; } = 200; // мсек
+        public RefreshModes RefreshMode { get; } = RefreshModes.Timer; // Events, Timer, Refresh
+        public int RefreshInterval { get; } = 100; // мсек
     }
     public partial class Program
     {

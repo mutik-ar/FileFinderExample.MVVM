@@ -5,6 +5,9 @@ using Interfaces.ViewModel;
 using System.Globalization;
 using System.Windows.Data;
 using System.Timers;
+using System.Collections.Specialized;
+using System.Collections.Immutable;
+using static System.Net.Mime.MediaTypeNames;
 
 
 
@@ -35,6 +38,14 @@ namespace View
             if (_viewModel.RefreshMode == Shared.RefreshModes.Refresh)
             {
                 SetTimer(_viewModel.RefreshInterval);
+            }
+            _viewModel.ListViewFoundFiles.PropertyChanged += OnListViewFoundFilesPropertyChanged;
+        }
+        protected void OnListViewFoundFilesPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e?.PropertyName == "List")
+            {
+                Dispatcher.Invoke(() => Scroll.ToBottom(ListViewFoundFiles));
             }
         }
 
@@ -69,7 +80,6 @@ namespace View
             //       The Elapsed event was raised at 09:40:31.084
             _viewModel.RefreshActionCommand.Execute();
         }
-
 
     }
 

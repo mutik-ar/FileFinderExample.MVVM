@@ -26,6 +26,7 @@ namespace ViewModel
         private vmButton _refreshData;
         private vmTextBlock _filesCount;
         private vmTextBlock _progressText;
+        private vmTextBlock _statusText;
         private vmProgressBar _progressBar;
         private string _contentStopSearch = "Прервать";
         private string _contentStartSearch = "Начать поиск";
@@ -90,6 +91,13 @@ namespace ViewModel
                 return _progressText ?? (_progressText = new());
             }
         }
+        public vmTextBlock StatusText
+        {
+            get
+            {
+                return _statusText ?? (_statusText = new());
+            }
+        }
 
         public vmProgressBar ProgressBar
         {
@@ -137,16 +145,20 @@ namespace ViewModel
             Drives.PropertyChanged += Drives_Changed;
             Drives.SelectedIndex = 0;
             RefreshMode = refreshMode;
+            string statusText = "Статус: обновление формы ";
             switch (RefreshMode.mode)
             {
                 case Mode.Events:
                     _model.PropertyChanged += OnModelChanged; // обновление UI через события
+                    StatusText.Text = $"{statusText} через события" ;
                     break;
                 case Mode.Timer:
                     SetTimer(RefreshMode.interval); // запуск таймера  с интервалом 0.5 и обновление UI через список измененных свойств
+                    StatusText.Text = $"{statusText} через обновление модели с интервалом {RefreshMode.interval} мсек";
                     break;
                 case Mode.Refresh:
                     // обновление UI через вызов процедуры Refresh 
+                    StatusText.Text = $"{statusText} запросом из формы к модели с интервалом {RefreshMode.interval} мсек";
                     break;
             }
             StartSearch.Content = _contentStartSearch;

@@ -22,7 +22,6 @@ namespace FileFinderExample
         //[Export(typeof(RefreshMode))]
         public RefreshMode refreshMode { get; set; }
 
-
         #endregion
 
 
@@ -47,14 +46,14 @@ namespace FileFinderExample
             conventions.ForType<Program>().ImportProperty<IModel>(p => p.Model);
             conventions.ForTypesDerivedFrom<IViewModel>().Export<IViewModel>();
             conventions.ForType<Program>().ImportProperty<IViewModel>(p => p.ViewModel);
+            RefreshMode.Interval = 500;
+            RefreshMode.Mode = Mode.Refresh;
             conventions.ForType<RefreshMode>().Export<RefreshMode>();
             conventions.ForType<Program>().ImportProperty<RefreshMode>(p => p.refreshMode);
 
 
             var catalog = new AggregateCatalog();
             catalog.Catalogs.Add(new DirectoryCatalog(AppDomain.CurrentDomain.BaseDirectory, conventions));
-            //var assem = Assembly.GetAssembly(typeof(RefreshMode)); // 
-            //catalog.Catalogs.Add(new AssemblyCatalog(assem, conventions));
             CompositionService service = catalog.CreateCompositionService();
             service.SatisfyImportsOnce(this, conventions);
 

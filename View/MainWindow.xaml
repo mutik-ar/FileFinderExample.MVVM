@@ -27,29 +27,30 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" Grid.ColumnSpan="2">
-            <TextBlock x:Name="LabelDrive" HorizontalAlignment="Left" Margin="5"  TextWrapping="Wrap" Text="Диск для поиска:" VerticalAlignment="Center" Width="100" Height="23"/>
+            <TextBlock x:Name="LabelDrive" HorizontalAlignment="Left" Margin="5"  Text="Диск для поиска:" VerticalAlignment="Center" Width="100" Height="23"/>
             <ComboBox x:Name="ComboBoxDrives" Width="700" Margin="5" Height="23"  ItemsSource="{Binding Path=Drives.List}"  
                                                                                   SelectedItem="{Binding Path=Drives.SelectedItem}" 
                                                                                   SelectedIndex="{Binding Path=Drives.SelectedIndex}"
                                                                                   IsEnabled="{Binding Path=Drives.IsEnabled, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="2">
-            <TextBlock x:Name="LabelSearchPath" HorizontalAlignment="Left" Margin="5"  TextWrapping="Wrap" Text="Путь для поиска:" VerticalAlignment="Center" Height="23"/>
+            <TextBlock x:Name="LabelSearchPath" HorizontalAlignment="Left" Margin="5"  Text="Путь для поиска:" VerticalAlignment="Center" Height="23"/>
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal" Grid.ColumnSpan="2">
-            <TextBox x:Name="TextBoxSearchPath" HorizontalAlignment="Left" Margin="5"  TextWrapping="Wrap" VerticalAlignment="Center" 
+            <TextBox x:Name="TextBoxSearchPath" HorizontalAlignment="Left" Margin="5"  VerticalAlignment="Center" 
                      Width="700" Height="23" Text="{Binding Path=SearchPath.Text, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"
                      IsEnabled="{Binding Path=SearchPath.IsEnabled, UpdateSourceTrigger=PropertyChanged}"/>
             <Button x:Name="ButtonSelectSearchDirectory" Width="100" Margin="5" Height="23" Content="Обзор..." Click="ButtonSelectSearchDirectory_Click"  
                     IsEnabled="{Binding Path=Drives.IsEnabled, UpdateSourceTrigger=PropertyChanged}"></Button>
         </StackPanel>
         <StackPanel Grid.Row="3" Orientation="Horizontal" Grid.ColumnSpan="2">
-            <TextBlock x:Name="LabelFileName" HorizontalAlignment="Left" Margin="5"  TextWrapping="Wrap" Text="Полное имя файла, часть имени файла или часть пути, содержащего файл:" VerticalAlignment="Center" Width="700" Height="23"/>
+            <TextBlock x:Name="LabelFileName" HorizontalAlignment="Left" Margin="5" Text="Полное имя файла, часть имени файла или часть пути, содержащего файл:" VerticalAlignment="Center" Width="700" Height="23"/>
         </StackPanel>
         <StackPanel Grid.Row="4" Orientation="Horizontal" Grid.ColumnSpan="2">
-            <TextBox x:Name="TextBoxFileName" HorizontalAlignment="Left" Margin="5"  TextWrapping="Wrap" VerticalAlignment="Center" 
+            <TextBox x:Name="TextBoxFileName" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center" 
                      Width="700" Height="23" Text="{Binding Path=FileNameMask.Text, UpdateSourceTrigger=PropertyChanged}"
                      IsEnabled="{Binding Path=FileNameMask.IsEnabled, UpdateSourceTrigger=PropertyChanged}"/>
             <Button x:Name="ButtonStartSearch" Width="100" Margin="5" Height="23" 
@@ -58,7 +59,7 @@
                     Command="{Binding FilesActionCommand}"></Button>
         </StackPanel>
         <StackPanel Grid.Row="5" Orientation="Horizontal" Grid.ColumnSpan="2">
-            <TextBlock x:Name="LabelFoundFilesList" HorizontalAlignment="Left" Margin="5"  TextWrapping="Wrap" Text="Список найденных файлов:" VerticalAlignment="Center" Width="700" Height="23"/>
+            <TextBlock x:Name="LabelFoundFilesList" HorizontalAlignment="Left" Margin="5"  Text="Список найденных файлов:" VerticalAlignment="Center" Width="700" Height="23"/>
         </StackPanel>
         <ListView x:Name="ListViewFoundFiles" Grid.Row="6" Height="270" Width="800" Margin="5" Grid.ColumnSpan="2" ItemsSource="{Binding Path=ListViewFoundFiles.List}">
             <ListView.View>
@@ -71,10 +72,10 @@
             </ListView.View>
         </ListView>
         <StackPanel Grid.Row="7" Orientation="Horizontal" Grid.ColumnSpan="2">
-            <TextBlock x:Name="LabelProgress" HorizontalAlignment="Left" Margin="5"  TextWrapping="Wrap" VerticalAlignment="Center" Height="23" 
+            <TextBlock x:Name="LabelProgress" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center" Height="23" 
                        Visibility="{Binding Path=ProgressText.IsVisible, Converter={StaticResource BoolToVisibleConverter}}"
                        Text="{Binding Path=ProgressText.Text, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock x:Name="LabelFilesCount" HorizontalAlignment="Right" Margin="5"  TextWrapping="Wrap" VerticalAlignment="Center"  Height="23"
+            <TextBlock x:Name="LabelFilesCount" HorizontalAlignment="Right" Margin="5" VerticalAlignment="Center"  Height="23"
                        Visibility="{Binding Path=FilesCount.IsVisible, Converter={StaticResource BoolToVisibleConverter}}"
                        Text="{Binding Path=FilesCount.Text, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
@@ -82,5 +83,7 @@
                      Visibility="{Binding Path=ProgressBar.IsVisible, Converter={StaticResource BoolToVisibleConverter}}"
                      IsIndeterminate="{Binding Path=ProgressBar.IsIndeterminate, UpdateSourceTrigger=PropertyChanged}"
                      Value="{Binding Path=ProgressBar.Value, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock x:Name="Status" Grid.Row="9" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Center" Height="23" Width="800"
+                     Text="{Binding Path=StatusText.Text, UpdateSourceTrigger=PropertyChanged}"/>
     </Grid>
 </Window>

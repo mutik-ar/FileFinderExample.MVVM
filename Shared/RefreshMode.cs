@@ -9,10 +9,17 @@ namespace Shared
     public enum Mode { Events, Timer, Refresh };
     public class RefreshMode
     {
-        RefreshMode()
+        static public int Interval = 500;
+        static public Mode Mode = Mode.Events;
+        //public RefreshMode()
+        //{
+        //    this.mode = Mode.Refresh;
+        //    this.interval = 100;
+        //}
+        public RefreshMode()
         {
-            this.mode = Mode.Refresh;
-            this.interval = 100;
+            this.mode = Mode;
+            this.interval = Interval;
         }
 
         public Mode mode { get; }

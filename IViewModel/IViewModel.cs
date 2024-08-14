@@ -13,6 +13,7 @@ namespace Interfaces.ViewModel
         vmTextBox FileNameMask { get; }
         vmTextBlock FilesCount { get; }
         vmTextBlock ProgressText { get; }
+        vmTextBlock StatusText { get; }
         vmProgressBar ProgressBar { get; }
         ActionCommand FilesActionCommand { get; }
         ActionCommand RefreshActionCommand { get; }
